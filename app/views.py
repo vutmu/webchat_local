@@ -1,16 +1,26 @@
 import psycopg2
-from flask import Flask, request, json, session, redirect, url_for
-from flask import render_template, flash
+from flask import Flask, request, json, session
+from flask import render_template
 
-# from flask_mail import Mail, Message
-# import random
+from flask_mail import Mail, Message
+import random
 
 import time
-
-# import os
+import os
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config.update(
+    MAIL_SERVER='smtp.yandex.ru',
+    MAIL_PORT=465,
+    MAIL_USE_TLS=False,
+    MAIL_USE_SSL=True,
+    MAIL_DEFAULT_SENDER='wasmoh@yandex.ru',
+    MAIL_USERNAME='wasmoh',
+    MAIL_PASSWORD='X2P*Unh/Y-/dmq,'
+)
+mail = Mail(app)
+DATABASE_URL = os.environ['DATABASE_URL']
 
 
 @app.route('/')
@@ -71,16 +81,35 @@ def auth():
     return "все пошло по пи..."
 
 
+@app.route("/sendmail", methods=['POST', 'GET'])
+def sendmail():
+    if 'checkcode' in request.args:
+        checkcode = int(request.args['checkcode'])
+        name = request.args['name']
+        query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
+        pgdb(query)
+        return {'Status':'ok'}
+    else:
+        data = request.json
+        email = data['email']
+        user = data['name']
+        password = data['password']
+        checkcode = random.randint(100, 1000)
+        body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
+               f" не вы, просто проигнорируйте это письмо! :) "
+        msg = Message(f"Wasmoh registration for {user}", recipients=[f"{email}"])
+        msg.body = f"{body}"
+        mail.send(msg)
+        query = (email, user, password, checkcode)
+        query = f"INSERT INTO accounts (email, name, password, checkcode) VALUES {query}"
+        pgdb(query)
+        return {'Status': 'sent'}
+
+
 # TODO неправильно обрабатываются инвалидные запросы, продумать логику
 
 def pgdb(query):
-    connection = psycopg2.connect(
-        database='simple_messenger',
-        user='force',
-        password='12345',
-        host='localhost',
-        port='5432',
-    )
+    connection = psycopg2.connect(DATABASE_URL, sslmode='require')
     connection.autocommit = True
     cursor = connection.cursor()
     cursor.execute(query)
