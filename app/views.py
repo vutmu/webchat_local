@@ -1,4 +1,4 @@
-import psycopg2
+#from dbrout import pgdb
 from flask import Flask, request, json, session
 from flask import render_template
 
@@ -6,7 +6,8 @@ from flask_mail import Mail, Message
 import random
 
 import time
-import os
+
+from app.dbrout import pgdb
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -20,7 +21,7 @@ app.config.update(
     MAIL_PASSWORD='X2P*Unh/Y-/dmq,'
 )
 mail = Mail(app)
-DATABASE_URL = os.environ['DATABASE_URL']
+
 
 
 @app.route('/')
@@ -108,12 +109,4 @@ def sendmail():
 
 # TODO неправильно обрабатываются инвалидные запросы, продумать логику
 
-def pgdb(query):
-    connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-    connection.autocommit = True
-    cursor = connection.cursor()
-    cursor.execute(query)
-    try:
-        return cursor.fetchall()
-    except:
-        pass
+
