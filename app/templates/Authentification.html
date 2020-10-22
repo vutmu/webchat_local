@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Аутентификация Scratchfile!</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <title>Аутентификация Wasmoh</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
     <script type="text/javascript">
 
@@ -13,27 +13,51 @@
             $("#but1").on('click',function(){
                 $(".par1").toggle(300);});
 
+            $('#but2').on('click',function(){
+                let email=$('#your_email').val();
+                let name=$('#your_name').val();
+                let password=$('#your_password').val();
+                if (email && name && password) {
+                    $.post('/sendmail',{in_email:email,in_name:name,in_password:password},
+                        function (response){
+                            let status=$.parseJSON(response)['status'];
+                            if (status=='sent'){alert("письмо отправлено, проверьте почту!")}
+                            else {
+                                alert(status)
+                            }
+                        })
+                } else {alert("заполните все поля!")}
+            });
+            $('#but3').on('click',function(){
+                let code=$('#check_code').val();
+                let name=$('#your_name').val();
+                if (code && name) {
+                    $.get('/auth',{name:name, code:code}) //добавить функцию обработки ответа
+                }
+                else {alert("Поля имя и код валидации должны быть заполнены")}
+            });
+
+            $('#but4').on('click',function(){
+                let name=$('[name="in_name"]').val();
+                let password=$('[name="in_password"]').val();
+                if (name && password){
+                    $.post("/auth",{in_name:name,in_password:password},
+                        function (response){
+                            let status=$.parseJSON(response)['status'];
+                            if (status=='1'){window.location="/base"}
+                            else if (status=='0') {alert("неправильная пара логин-пароль!")}
+                            else if (status=='-404') {window.location="/dbfail"}
+                        })}
+                else {alert("заполните все поля!")}
+            })
+
         });
-
-
-function check_auth(){
-            let name=$('[name="in_name"]').val();
-            let password=$('[name="in_password"]').val();
-            if (name && password){
-                $.post("/auth",{in_name:name,in_password:password},
-                function (response){
-                let status=$.parseJSON(response)['status'];
-                if (status=='ok'){window.location="/base"}
-                else {alert("неправильная пара логин-пароль!")}
-                    })}
-            else {alert("заполните все поля!")}
-            }
-</script>
+    </script>
 </head>
 <body>
 <input name="in_name" type="text" maxlength="50">
 <input name="in_password" type="text" maxlength="50">
-<input type="button" value="Войти" onclick="check_auth()" >
+<input id="but4" type="button" value="Войти">
 <input id="but1" type="button" value="Зарегистрироваться">
 <div class= "par1" style="display: none">
     <p><label for="your_email">Куда вам отправить письмо?</label>
@@ -42,7 +66,11 @@ function check_auth(){
         <input id="your_name" type="text" maxlength="50"></p>
     <p><label for="your_password">Придумайте ваш пороль</label>
         <input id="your_password" type="text" maxlength="50"></p>
-    <p><input type="button" value="Поехали!"></p>
+    <p><input id="but2" type="button" value="Поехали!"></p>
+    <p><label for="check_code">Проверочный код из письма:</label>
+        <input id="check_code" type="text" maxlength="50">
+        <input id="but3" type="button" value="Валидация"></p>
+
 </div>
 
 </body>

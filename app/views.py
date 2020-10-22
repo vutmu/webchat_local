@@ -1,4 +1,3 @@
-#from dbrout import pgdb
 from flask import Flask, request, json, session
 from flask import render_template
 
@@ -17,27 +16,30 @@ app.config.update(
     MAIL_USE_TLS=False,
     MAIL_USE_SSL=True,
     MAIL_DEFAULT_SENDER='wasmoh@yandex.ru',
-    MAIL_USERNAME='wasmoh',
-    MAIL_PASSWORD='X2P*Unh/Y-/dmq,'
+    MAIL_USERNAME='wasmoh11111',  # ложный юзернейм!(wasmoh)
+    MAIL_PASSWORD='eluoqpoaykxcgjaz'
 )
 mail = Mail(app)
-
 
 
 @app.route('/')
 @app.route('/index')
 def index():
+    # if 'username' in session:
+    #     return redirect(url_for('base'))
     return render_template('Authentification.html')
+
+
+@app.route('/dbfail')
+def dbfail():
+    return "база данных недоступна!"
 
 
 @app.route('/base')
 def base():
-    print('im on base')
     if 'username' in session:
-        print('username in session')
         return render_template('base.html', user=session['username'])
     else:
-        print('username  not in session')
         return "вы не авторизованы!"
 
 
@@ -47,66 +49,62 @@ def send():
         data = request.form
         query = (data['name'], data['text'], time.time())
         query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
-        pgdb(query)
-        return {'Status': 'ok'}
-    except:
-        return 'Все норм'
+        dbresponse = pgdb(query)
+        return {'status': str(dbresponse[-1][-1])}
+    except Exception as err:
+        return err
 
 
 @app.route('/get_mess')
 def get_mess():
     last_id = request.args.get('last_id')
     query = f" SELECT * FROM messages WHERE id>{last_id} LIMIT 3"
-    posts = [{'id': i[0], 'author': i[1], 'body': i[2]} for i in pgdb(query)]
-    posts = {'posts': posts}
-    return json.dumps(posts)
+    dbresponse = pgdb(query)
+    if dbresponse and dbresponse[-1][-1] == -404:
+        posts = {'posts': '-404'}
+        return json.dumps(posts)
+    else:
+        posts = [{'id': i[0], 'author': i[1], 'body': i[2]} for i in dbresponse]
+        posts = {'posts': posts}
+        return json.dumps(posts)
 
 
-@app.route("/auth", methods=['GET', 'POST'])
+@app.route("/auth", methods=['POST', 'GET'])
 def auth():
     if request.method == 'POST':
-
         data = request.form
         name = data.get('in_name')
         password = data['in_password']
         query = f"SELECT COUNT(*) FROM accounts where name='{name}' AND password='{password}' AND status = true;"
-        response = pgdb(query)[-1][-1]
-        print('dbresponse', response)
-        if response > 0:
+        dbresponse = pgdb(query)
+        if dbresponse[-1][-1] == 1:
             session['username'] = name
-            return json.dumps({'status': 'ok'})
-            # return redirect(url_for('base'))
-        else:
-            return json.dumps({'status': 'bad'})
-            # return  redirect(url_for('index'))
-    return "все пошло по пи..."
+        return json.dumps({'status': str(dbresponse[-1][-1])})
+    elif request.method == 'GET':
+        code = request.args.get('code')
+        name = request.args.get('name')
+        query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={code}"
+        dbresponse = pgdb(query)
+        return json.dumps({'status': str(dbresponse[-1][-1])})
 
 
-@app.route("/sendmail", methods=['POST', 'GET'])
+@app.route("/sendmail", methods=['POST'])
 def sendmail():
-    if 'checkcode' in request.args:
-        checkcode = int(request.args['checkcode'])
-        name = request.args['name']
-        query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
-        pgdb(query)
-        return {'Status':'ok'}
-    else:
-        data = request.json
-        email = data['email']
-        user = data['name']
-        password = data['password']
-        checkcode = random.randint(100, 1000)
-        body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
-               f" не вы, просто проигнорируйте это письмо! :) "
-        msg = Message(f"Wasmoh registration for {user}", recipients=[f"{email}"])
-        msg.body = f"{body}"
+    data = request.form
+    email = data['in_email']
+    name = data['in_name']
+    password = data['in_password']
+    checkcode = random.randint(100, 1000)
+    body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
+           f" не вы, просто проигнорируйте это письмо! :) "
+    msg = Message(f"Wasmoh registration for {name}", recipients=[f"{email}"])
+    msg.body = f"{body}"
+    try:
         mail.send(msg)
-        query = (email, user, password, checkcode)
+        query = (email, name, password, checkcode)
         query = f"INSERT INTO accounts (email, name, password, checkcode) VALUES {query}"
         pgdb(query)
-        return {'Status': 'sent'}
-
-
-# TODO неправильно обрабатываются инвалидные запросы, продумать логику
-
-
+        return json.dumps({'status': 'sent'})
+    except Exception as err:
+        print(err)
+        return json.dumps({'status': 'письмо не отправилось, извините!'})
