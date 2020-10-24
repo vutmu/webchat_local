@@ -16,7 +16,7 @@ app.config.update(
     MAIL_USE_TLS=False,
     MAIL_USE_SSL=True,
     MAIL_DEFAULT_SENDER='wasmoh@yandex.ru',
-    MAIL_USERNAME='wasmoh11111',  # ложный юзернейм!(wasmoh)
+    MAIL_USERNAME='wasmoh',
     MAIL_PASSWORD='eluoqpoaykxcgjaz'
 )
 mail = Mail(app)
@@ -58,7 +58,7 @@ def send():
 @app.route('/get_mess')
 def get_mess():
     last_id = request.args.get('last_id')
-    query = f" SELECT * FROM messages WHERE id>{last_id} LIMIT 3"
+    query = f" SELECT * FROM messages WHERE id>{last_id} LIMIT 100"
     dbresponse = pgdb(query)
     if dbresponse and dbresponse[-1][-1] == -404:
         posts = {'posts': '-404'}
@@ -81,11 +81,16 @@ def auth():
             session['username'] = name
         return json.dumps({'status': str(dbresponse[-1][-1])})
     elif request.method == 'GET':
-        code = request.args.get('code')
+        checkcode = request.args.get('code')
         name = request.args.get('name')
-        query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={code}"
+        query = f"SELECT COUNT(*) FROM accounts WHERE name='{name}' AND checkcode='{checkcode}' "
         dbresponse = pgdb(query)
-        return json.dumps({'status': str(dbresponse[-1][-1])})
+        if dbresponse[-1][-1] != 1:
+            return json.dumps({'status': 'валидация не прошла!'})
+        else:
+            query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
+            pgdb(query)
+            return json.dumps({'status': 'валидация успешна!'})
 
 
 @app.route("/sendmail", methods=['POST'])

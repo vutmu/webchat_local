@@ -28,11 +28,15 @@
                         })
                 } else {alert("заполните все поля!")}
             });
+
             $('#but3').on('click',function(){
                 let code=$('#check_code').val();
                 let name=$('#your_name').val();
                 if (code && name) {
-                    $.get('/auth',{name:name, code:code}) //добавить функцию обработки ответа
+                    $.get('/auth',{name:name, code:code},function (response){
+                        let status=$.parseJSON(response)['status'];
+                        alert(status)
+                    }) //добавить функцию обработки ответа
                 }
                 else {alert("Поля имя и код валидации должны быть заполнены")}
             });
