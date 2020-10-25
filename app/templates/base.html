@@ -35,17 +35,24 @@
         });
     }
 
-    //изменить на jquery событие через кнопку
+
     $(document).ready(function(){
         $("#but1").on('click',function (){
             let json_data = {name: $('#your_name').text(), text: $('#your_message').val()};
             console.log(json_data)
             $.post("/send", json_data);
         })
+        $("#but2").on('click',function (){
+            $.get("/logout",function (){
+                window.location="/index"
+            })
+        })
+
     })
 </script>
 
 Добро пожаловать,<p id="your_name">{{user}}</p>!
+<input id="but2" type="button" value="выйти">
 <p><label for="your_message">Введите текст:</label></p>
 <p><textarea id="your_message" cols="200" maxlength="1000" rows="5"> </textarea></p>
 <input id="but1" type="button" value="Отправить">

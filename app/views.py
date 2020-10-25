@@ -69,6 +69,11 @@ def get_mess():
         return json.dumps(posts)
 
 
+@app.route("/logout", methods=['POST', 'GET'])
+def logout():
+    session.pop('username', None)
+    return json.dumps({'status':'logout'})
+
 @app.route("/auth", methods=['POST', 'GET'])
 def auth():
     if request.method == 'POST':
