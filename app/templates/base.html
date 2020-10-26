@@ -6,7 +6,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body >
+
+<div style="">Добро пожаловать,<span id="your_name">{{user}}</span>!</div><br>
+<img src="/static/images/reksar.png" alt="reksar" height="3%" width="3%"><br>
+<input id="but2" type="button" value="выйти">
+<p><label for="your_message">Введите текст:</label></p>
+<p><textarea id="your_message" cols="200" maxlength="1000" rows="5"> </textarea></p>
+<input id="but1" type="button" value="Отправить">
+
+<div class="messages" style="width: 400px; height: 600px; overflow: auto;"></div>
 <script>
+    setInterval(get_mess,1000)
 
     function pretty_print(json)
     {
@@ -19,8 +29,8 @@
     function get_mess()
     {
         let last_id = 0;
-        if ($("p").is(".messages p")){
-            last_id = $('.messages > p:last-child').attr('id');
+        if ($("div").is(".messages div")){
+            last_id = $('.messages > div:last-child').attr('id');
         }
         $.get("/get_mess",{ last_id: last_id}, function(response)
         {
@@ -29,8 +39,14 @@
             if (posts=='-404') {window.location="/dbfail"};
             $.each(posts, function(index, value)
             {
-                let p=$('<p></p>').attr("id",value['id']).html(pretty_print(value))
-                $('.messages').append(p);
+                let mess_id=value['id']
+                let d=$('<div>').attr("id",mess_id).attr("class","messblock")
+                $('.messages').append(d);
+                let i=$('<img>').attr("class","inimage").attr("src","/static/images/reksar.png")
+                $('[id='+mess_id+'].messblock').append(i);
+                let p=$('<p>').attr("class","intext").html(pretty_print(value))
+                $('[id='+mess_id+'].messblock').append(p);
+
             });
         });
     }
@@ -51,15 +67,5 @@
     })
 </script>
 
-Добро пожаловать,<p id="your_name">{{user}}</p>!
-<input id="but2" type="button" value="выйти">
-<p><label for="your_message">Введите текст:</label></p>
-<p><textarea id="your_message" cols="200" maxlength="1000" rows="5"> </textarea></p>
-<input id="but1" type="button" value="Отправить">
-
-<div class="messages" style="width: 400px; height: 600px; overflow: auto;"></div>
-<script>
-    setInterval(get_mess,1000)
-</script>
 </body>
 </html>
