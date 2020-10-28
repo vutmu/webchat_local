@@ -9,7 +9,7 @@ import time
 from app.dbrout import pgdb
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'_5#y7L"F1Q2z\n\xec]/'
 app.config.update(
     MAIL_SERVER='smtp.yandex.ru',
     MAIL_PORT=465,
@@ -72,7 +72,8 @@ def get_mess():
 @app.route("/logout", methods=['POST', 'GET'])
 def logout():
     session.pop('username', None)
-    return json.dumps({'status':'logout'})
+    return json.dumps({'status': 'logout'})
+
 
 @app.route("/auth", methods=['POST', 'GET'])
 def auth():
@@ -118,3 +119,16 @@ def sendmail():
     except Exception as err:
         print(err)
         return json.dumps({'status': 'письмо не отправилось, извините!'})
+
+
+@app.route('/profile/<user>')
+def profile(user):
+    if "username" in session:
+        query = f"SELECT COUNT(*) FROM accounts where name='{user}'"
+        dbresponse = pgdb(query)
+        if dbresponse[-1][-1] > 0:
+            return render_template("profile.html", user=user)
+        else:
+            return "такого челика нету!"
+    else:
+        return "вы не авторизованы!"
