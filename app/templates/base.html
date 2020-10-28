@@ -20,9 +20,11 @@
 
     function pretty_print(json)
     {
-        let author=json['author'].toString()
-        let body=json['body'].toString()
-        return author+' написал: '+body
+        let author=json['author']
+        let body=json['body']
+        let mstime=Math.round(json['posttime'])*1000
+        let posttime=new Date(mstime)
+        return author+' написал(а) в '+posttime+': '+body
     }
     //Изменить параметры пагинации
 

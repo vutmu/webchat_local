@@ -64,7 +64,7 @@ def get_mess():
         posts = {'posts': '-404'}
         return json.dumps(posts)
     else:
-        posts = [{'id': i[0], 'author': i[1], 'body': i[2]} for i in dbresponse]
+        posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3]} for i in dbresponse]
         posts = {'posts': posts}
         return json.dumps(posts)
 
