@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <title>WasmohWeb</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <style type="text/css">
+        .messblock {
+            width: 400px;
+            background: #ccc;
+            padding: 5px 20px 5px 5px;
+            border: solid 1px black;
+            float: left;
+        }
+
+    </style>
 </head>
 <body >
 
@@ -14,7 +24,7 @@
 <p><textarea id="your_message" cols="200" maxlength="1000" rows="5"> </textarea></p>
 <input id="but1" type="button" value="Отправить">
 
-<div class="messages" style="width: 400px; height: 600px; overflow: auto;"></div>
+<div class="messages" style="width: 450px; height: 600px; overflow: auto;"></div>
 <script>
     setInterval(get_mess,1000)
 
