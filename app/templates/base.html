@@ -42,7 +42,7 @@
             $.each(posts, function(index, value)
             {
                 let mess_id=value['id']
-                let ref="http://127.0.0.1:5000/profile/"+value['author']
+                let ref="https://wasmoh-web.herokuapp.com/profile/"+value['author']
                 let d=$('<div>').attr("id",mess_id).attr("class","messblock")
                 $('.messages').append(d);
                 let a= $('<a><img src="/static/images/reksar.png" alt="reksar"></a>').attr("href",ref).attr("class","ref")
