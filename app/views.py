@@ -38,7 +38,12 @@ def dbfail():
 @app.route('/base')
 def base():
     if 'username' in session:
-        return render_template('base.html', user=session['username'])
+        name = session['username']
+        query = f"SELECT avatar from accounts WHERE name='{name}'"
+        dbresponse = pgdb(query)
+        avatar = dbresponse[-1][-1]
+        data = {'name': name, 'avatar': avatar}
+        return render_template('base.html', data=data)
     else:
         return "вы не авторизованы!"
 
@@ -58,13 +63,14 @@ def send():
 @app.route('/get_mess')
 def get_mess():
     last_id = request.args.get('last_id')
-    query = f" SELECT * FROM messages WHERE id>{last_id} LIMIT 100"
+    query = f"SELECT messages.id, messages.name, message, posting_time, avatar FROM messages join accounts on " \
+            f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
     dbresponse = pgdb(query)
     if dbresponse and dbresponse[-1][-1] == -404:
         posts = {'posts': '-404'}
         return json.dumps(posts)
     else:
-        posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3]} for i in dbresponse]
+        posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in dbresponse]
         posts = {'posts': posts}
         return json.dumps(posts)
 
