@@ -105,6 +105,8 @@ def auth():
             return json.dumps({'status': 'валидация успешна!'})
 
 
+# TODO добавить проверку на дублирования имен в бд
+
 @app.route("/sendmail", methods=['POST'])
 def sendmail():
     data = request.form
@@ -130,11 +132,28 @@ def sendmail():
 @app.route('/profile/<user>')
 def profile(user):
     if "username" in session:
-        query = f"SELECT COUNT(*) FROM accounts where name='{user}'"
+        query = f"SELECT * FROM accounts where name='{user}'"
         dbresponse = pgdb(query)
-        if dbresponse[-1][-1] > 0:
-            return render_template("profile.html", user=user)
+        if len(dbresponse) > 0:
+            name = dbresponse[-1][0]
+            avatar = dbresponse[-1][5]
+            data = {'name': name, 'avatar': avatar}
+            return render_template("profile.html", data=data)
         else:
             return "такого челика нету!"
+    else:
+        return "вы не авторизованы!"
+
+
+@app.route('/settings')
+def settings():
+    if "username" in session:
+        name = session['username']
+        query = f"SELECT * FROM accounts where name='{name}'"
+        dbresponse = pgdb(query)
+        name = dbresponse[-1][0]
+        avatar = dbresponse[-1][5]
+        data = {'name': name, 'avatar': avatar}
+        return render_template("settings.html", data=data)
     else:
         return "вы не авторизованы!"
