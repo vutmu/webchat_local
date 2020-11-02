@@ -29,7 +29,7 @@
         })
     })
 
-    $(document).on('dblclick','.par1 img',function (){
+    $(document).on('click','.par1 img',function (){
         let avatar=$(this).attr('src')
         $.get('/settings',{subfunction: 'change_avatar',avatar:avatar},function (){
             $('#avatar').attr('src',avatar)
