@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Настройки {{data['name']}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </head>
 <body>
 <p>это страница настроек {{data['name']}}</p><br>
-<img src={{data['avatar']}}><br>
-<input type="button" value="сменить аватарку">
+<img src={{data['avatar']}} alt="avatar"><br>
+<input type="button" id="but1" value="сменить аватарку">
+<div class= "par1" ></div>
+<script>
+    $('#but1').on('click',function (){
+        console.log('метка нажатия кнопки')
+        $.get('/settings', {subfunction: 'get_pictures'},function (response){
+            response=jQuery.parseJSON(response)
+            console.log(response['pictures'])
+            $.each(response['pictures'],function (index, value){
+                console.log(value)
+                let ref="/static/images/"+value
+                let p=$('<img src='+ref+' class="picture">')
+                $('.par1').append(p)
+                if (((index+1) % 2)==0) {
+                    $('.par1').append('<br>')
+                }
 
+            })
+            //do smth to show pictures
+        })
+    })
+
+    $(document).on('dblclick','.par1 img',function (){
+        console.log('есть контакт')
+    })
+</script>
 </body>
 </html>

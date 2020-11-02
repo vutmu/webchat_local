@@ -3,7 +3,7 @@ from flask import render_template
 
 from flask_mail import Mail, Message
 import random
-
+import os
 import time
 
 from app.dbrout import pgdb
@@ -148,12 +148,19 @@ def profile(user):
 @app.route('/settings')
 def settings():
     if "username" in session:
-        name = session['username']
-        query = f"SELECT * FROM accounts where name='{name}'"
-        dbresponse = pgdb(query)
-        name = dbresponse[-1][0]
-        avatar = dbresponse[-1][5]
-        data = {'name': name, 'avatar': avatar}
-        return render_template("settings.html", data=data)
+        if 'subfunction' not in request.args:
+            name = session['username']
+            query = f"SELECT * FROM accounts where name='{name}'"
+            dbresponse = pgdb(query)
+            name = dbresponse[-1][0]
+            avatar = dbresponse[-1][5]
+            data = {'name': name, 'avatar': avatar}
+            return render_template("settings.html", data=data)
+        elif request.args.get('subfunction') == 'get_pictures':
+            path = 'app/static/images'
+            pictures = [i for i in os.walk(path)]
+            print(pictures)
+            data = {'pictures': pictures[-1][-1]}
+            return json.dumps(data)
     else:
         return "вы не авторизованы!"
