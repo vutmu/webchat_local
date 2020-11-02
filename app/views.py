@@ -159,8 +159,15 @@ def settings():
         elif request.args.get('subfunction') == 'get_pictures':
             path = 'app/static/images'
             pictures = [i for i in os.walk(path)]
-            print(pictures)
             data = {'pictures': pictures[-1][-1]}
             return json.dumps(data)
+        elif request.args.get('subfunction') == 'change_avatar':
+            name = session['username']
+            avatar = request.args.get('avatar')
+            print(name, avatar)
+            query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
+            pgdb(query)
+            return json.dumps({'status': '??'})
+
     else:
         return "вы не авторизованы!"

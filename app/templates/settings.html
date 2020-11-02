@@ -13,12 +13,9 @@
 <div class= "par1" ></div>
 <script>
     $('#but1').on('click',function (){
-        console.log('метка нажатия кнопки')
         $.get('/settings', {subfunction: 'get_pictures'},function (response){
             response=jQuery.parseJSON(response)
-            console.log(response['pictures'])
             $.each(response['pictures'],function (index, value){
-                console.log(value)
                 let ref="/static/images/"+value
                 let p=$('<img src='+ref+' class="picture">')
                 $('.par1').append(p)
@@ -32,6 +29,10 @@
     })
 
     $(document).on('dblclick','.par1 img',function (){
+        let avatar=$(this).attr('src')
+        $.get('/settings',{subfunction: 'change_avatar',avatar:avatar},function (){
+            //do smth to change avatar
+        })
         console.log('есть контакт')
     })
 </script>
