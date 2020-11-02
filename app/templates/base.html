@@ -71,7 +71,7 @@
 
     $(document).ready(function(){
         $("#but1").on('click',function (){
-            let json_data = {name: "{{user}}", text: $('#your_message').val()};
+            let json_data = {name: "{{data['name']}}", text: $('#your_message').val()};
             console.log(json_data)
             $.post("/send", json_data);
         })
