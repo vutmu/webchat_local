@@ -7,8 +7,9 @@
 
 </head>
 <body>
+<a href="../base">На главную</a>
 <p>это страница настроек {{data['name']}}</p><br>
-<img src={{data['avatar']}} alt="avatar"><br>
+<img src={{data['avatar']}} alt="avatar" id="avatar"><br>
 <input type="button" id="but1" value="сменить аватарку">
 <div class= "par1" ></div>
 <script>
@@ -31,6 +32,7 @@
     $(document).on('dblclick','.par1 img',function (){
         let avatar=$(this).attr('src')
         $.get('/settings',{subfunction: 'change_avatar',avatar:avatar},function (){
+            $('#avatar').attr('src',avatar)
             //do smth to change avatar
         })
         console.log('есть контакт')
