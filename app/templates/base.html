@@ -46,7 +46,7 @@
         if ($("div").is(".messages div")){
             last_id = $('.messages > div:last-child').attr('id');
         }
-        $.get("/get_mess",{ last_id: last_id}, function(response)
+        $.get("/base",{ subfunction:'get_mess',last_id: last_id}, function(response)
         {
             let messages = $.parseJSON(response);
             let posts=messages['posts'];
@@ -73,10 +73,10 @@
         $("#but1").on('click',function (){
             let json_data = {name: "{{data['name']}}", text: $('#your_message').val()};
             console.log(json_data)
-            $.post("/send", json_data);
+            $.post("/base", json_data);
         })
         $("#but2").on('click',function (){
-            $.get("/logout",function (){
+            $.get("/base",{subfunction:'logout'},function (){
                 window.location="/index"
             })
         })

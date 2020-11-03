@@ -35,50 +35,42 @@ def dbfail():
     return "база данных недоступна!"
 
 
-@app.route('/base')
+@app.route('/base', methods=['GET', 'POST'])
 def base():
     if 'username' in session:
-        name = session['username']
-        query = f"SELECT avatar from accounts WHERE name='{name}'"
-        dbresponse = pgdb(query)
-        avatar = dbresponse[-1][-1]
-        data = {'name': name, 'avatar': avatar}
-        return render_template('base.html', data=data)
+        if request.method == 'GET':
+            if 'subfunction' not in request.args:
+                name = session['username']
+                query = f"SELECT avatar from accounts WHERE name='{name}'"
+                dbresponse = pgdb(query)
+                avatar = dbresponse[-1][-1]
+                data = {'name': name, 'avatar': avatar}
+                return render_template('base.html', data=data)
+            elif request.args.get('subfunction') == 'get_mess':
+                last_id = request.args.get('last_id')
+                query = f"SELECT messages.id, messages.name, message, posting_time, avatar " \
+                        f"FROM messages join accounts on " \
+                        f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
+                dbresponse = pgdb(query)
+                if dbresponse and dbresponse[-1][-1] == -404:
+                    posts = {'posts': '-404'}
+                    return json.dumps(posts)
+                else:
+                    posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in
+                             dbresponse]
+                    posts = {'posts': posts}
+                    return json.dumps(posts)
+            elif request.args.get('subfunction') == 'logout':
+                session.pop('username', None)
+                return json.dumps({'status': 'logout'})
+        elif request.method == 'POST':
+            data = request.form
+            query = (data['name'], data['text'], time.time())
+            query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
+            dbresponse = pgdb(query)
+            return {'status': str(dbresponse[-1][-1])}
     else:
         return "вы не авторизованы!"
-
-
-@app.route("/send", methods=['GET', 'POST'])
-def send():
-    try:
-        data = request.form
-        query = (data['name'], data['text'], time.time())
-        query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
-        dbresponse = pgdb(query)
-        return {'status': str(dbresponse[-1][-1])}
-    except Exception as err:
-        return err
-
-
-@app.route('/get_mess')
-def get_mess():
-    last_id = request.args.get('last_id')
-    query = f"SELECT messages.id, messages.name, message, posting_time, avatar FROM messages join accounts on " \
-            f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
-    dbresponse = pgdb(query)
-    if dbresponse and dbresponse[-1][-1] == -404:
-        posts = {'posts': '-404'}
-        return json.dumps(posts)
-    else:
-        posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in dbresponse]
-        posts = {'posts': posts}
-        return json.dumps(posts)
-
-
-@app.route("/logout", methods=['POST', 'GET'])
-def logout():
-    session.pop('username', None)
-    return json.dumps({'status': 'logout'})
 
 
 @app.route("/auth", methods=['POST', 'GET'])
@@ -164,7 +156,6 @@ def settings():
         elif request.args.get('subfunction') == 'change_avatar':
             name = session['username']
             avatar = request.args.get('avatar')
-            print(name, avatar)
             query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
             pgdb(query)
             return json.dumps({'status': '??'})
