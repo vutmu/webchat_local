@@ -97,13 +97,16 @@ def auth():
             return json.dumps({'status': 'валидация успешна!'})
 
 
-# TODO добавить проверку на дублирования имен в бд
 
 @app.route("/sendmail", methods=['POST'])
 def sendmail():
     data = request.form
-    email = data['in_email']
     name = data['in_name']
+    query = f"select count(*) from accounts where name='{name}'"
+    dbresponse = pgdb(query)
+    if dbresponse[-1][-1] > 0:
+        return json.dumps({'status': 'это имя уже занято!'})
+    email = data['in_email']
     password = data['in_password']
     checkcode = random.randint(100, 1000)
     body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
