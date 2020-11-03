@@ -1,10 +1,12 @@
-from flask import Flask, request, json, session
+from flask import Flask, request, json, session, url_for
 from flask import render_template
 
 from flask_mail import Mail, Message
 import random
 import os
 import time
+
+from werkzeug.utils import redirect
 
 from app.dbrout import pgdb
 
@@ -23,11 +25,58 @@ mail = Mail(app)
 
 
 @app.route('/')
-@app.route('/index')
-def index():
-    # if 'username' in session:
-    #     return redirect(url_for('base'))
-    return render_template('Authentification.html')
+@app.route("/auth", methods=['POST', 'GET'])
+def auth():
+    if 'username' in session:  # возможно это надо переместить в гет
+        return redirect(url_for('base'))
+    elif request.method == 'POST':
+        data = request.form
+        if data['subfunction'] == 'auth':
+            name = data.get('in_name')
+            password = data['in_password']
+            query = f"SELECT COUNT(*) FROM accounts where name='{name}' AND password='{password}' AND status = true;"
+            dbresponse = pgdb(query)
+            if dbresponse[-1][-1] == 1:
+                session['username'] = name
+            return json.dumps({'status': str(dbresponse[-1][-1])})
+        elif data['subfunction'] == 'sendmail':
+            name = data['in_name']
+            query = f"select count(*) from accounts where name='{name}'"
+            dbresponse = pgdb(query)
+            if dbresponse[-1][-1] > 0:
+                return json.dumps({'status': 'это имя уже занято!'})
+            email = data['in_email']
+            password = data['in_password']
+            checkcode = random.randint(100, 1000)
+            body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
+                   f" не вы, просто проигнорируйте это письмо! :) "
+            msg = Message(f"Wasmoh registration for {name}", recipients=[f"{email}"])
+            msg.body = f"{body}"
+            try:
+                mail.send(msg)
+                query = (email, name, password, checkcode)
+                query = f"INSERT INTO accounts (email, name, password, checkcode) VALUES {query}"
+                pgdb(query)
+                return json.dumps({'status': 'sent'})
+            except Exception as err:
+                print(err)
+                return json.dumps({'status': 'письмо не отправилось, извините!'})
+
+    elif request.method == 'GET':
+        if 'subfunction' not in request.args:
+            return render_template('Authentification.html')
+        elif request.args['subfunction'] == 'validation':
+            checkcode = request.args.get('code')
+            name = request.args.get('name')
+            query = f"SELECT COUNT(*) FROM accounts WHERE name='{name}' AND checkcode='{checkcode}' "
+            dbresponse = pgdb(query)
+            if dbresponse[-1][-1] != 1:
+                return json.dumps({'status': 'валидация не прошла!'})
+            else:
+                query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
+                pgdb(query)
+                session['username'] = name
+                return json.dumps({'status': 'валидация успешна!'})
 
 
 @app.route('/dbfail')
@@ -71,57 +120,6 @@ def base():
             return {'status': str(dbresponse[-1][-1])}
     else:
         return "вы не авторизованы!"
-
-
-@app.route("/auth", methods=['POST', 'GET'])
-def auth():
-    if request.method == 'POST':
-        data = request.form
-        name = data.get('in_name')
-        password = data['in_password']
-        query = f"SELECT COUNT(*) FROM accounts where name='{name}' AND password='{password}' AND status = true;"
-        dbresponse = pgdb(query)
-        if dbresponse[-1][-1] == 1:
-            session['username'] = name
-        return json.dumps({'status': str(dbresponse[-1][-1])})
-    elif request.method == 'GET':
-        checkcode = request.args.get('code')
-        name = request.args.get('name')
-        query = f"SELECT COUNT(*) FROM accounts WHERE name='{name}' AND checkcode='{checkcode}' "
-        dbresponse = pgdb(query)
-        if dbresponse[-1][-1] != 1:
-            return json.dumps({'status': 'валидация не прошла!'})
-        else:
-            query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
-            pgdb(query)
-            return json.dumps({'status': 'валидация успешна!'})
-
-
-
-@app.route("/sendmail", methods=['POST'])
-def sendmail():
-    data = request.form
-    name = data['in_name']
-    query = f"select count(*) from accounts where name='{name}'"
-    dbresponse = pgdb(query)
-    if dbresponse[-1][-1] > 0:
-        return json.dumps({'status': 'это имя уже занято!'})
-    email = data['in_email']
-    password = data['in_password']
-    checkcode = random.randint(100, 1000)
-    body = f"Это письмо для регистрации! Проверочный код:{checkcode}  Если вы это" \
-           f" не вы, просто проигнорируйте это письмо! :) "
-    msg = Message(f"Wasmoh registration for {name}", recipients=[f"{email}"])
-    msg.body = f"{body}"
-    try:
-        mail.send(msg)
-        query = (email, name, password, checkcode)
-        query = f"INSERT INTO accounts (email, name, password, checkcode) VALUES {query}"
-        pgdb(query)
-        return json.dumps({'status': 'sent'})
-    except Exception as err:
-        print(err)
-        return json.dumps({'status': 'письмо не отправилось, извините!'})
 
 
 @app.route('/profile/<user>')
