@@ -114,10 +114,11 @@ def base():
                 return json.dumps({'status': 'logout'})
         elif request.method == 'POST':
             data = request.form
-            query = (data['name'], data['text'], time.time())
-            query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
-            dbresponse = pgdb(query)
-            return {'status': str(dbresponse[-1][-1])}
+            if data['subfunction'] == 'send_mess':
+                query = (data['name'], data['text'], time.time())
+                query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
+                dbresponse = pgdb(query)
+                return {'status': str(dbresponse[-1][-1])}
     else:
         return "вы не авторизованы!"
 

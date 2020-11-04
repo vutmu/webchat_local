@@ -7,9 +7,9 @@
     <style type="text/css">
         .messblock {
             width: 400px;
-            background: #ccc;
+            background: #7a7070;
             padding: 5px 20px 5px 5px;
-            border: solid 1px black;
+            border: solid 1px #a51616;
             float: left;
         }
 
@@ -70,9 +70,19 @@
 
     $(document).ready(function(){
         $("#but1").on('click',function (){
-            let json_data = {name: "{{data['name']}}", text: $('#your_message').val()};
+            let json_data = {subfunction:'send_mess',name: "{{data['name']}}", text: $('#your_message').val()};
             $.post("/base", json_data);
+            $('#your_message').val("")
         })
+        $('#your_message').keypress(function (e){
+            let key = e.which;
+            if(key == 13)
+            {
+                $('#but1').click();
+                return false;
+            }
+        })
+
         $("#but2").on('click',function (){
             $.get("/base",{subfunction:'logout'},function (){
                 window.location="/auth"
