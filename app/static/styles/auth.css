@@ -1,0 +1,40 @@
+div.auth {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 40%;
+    height: 50%;
+    border: solid;
+    border-width: 0.5em;
+    border-color: black;
+    text-align: center;
+}
+input[id="in_name"] {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 40%;
+    height: 10%;
+
+}
+input[id="in_password"] {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 40%;
+    height: 10%;
+}
+input[id="but4"] {
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+    width: 40%;
+    height: 10%;
+}
+input[id="but1"] {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    width: 40%;
+    height: 10%;
+}

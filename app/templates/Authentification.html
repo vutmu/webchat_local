@@ -4,55 +4,12 @@
     <meta charset="UTF-8">
     <title>Аутентификация Wasmoh</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <style type="text/css">
-        div.auth {
-            position: absolute;
-            top: 10%;
-            left: 30%;
-            width: 40%;
-            height: 50%;
-            border: solid;
-            border-width: 0.5em;
-            border-color: black;
-            text-align: center;
-        }
-        input[name="in_name"] {
-            position: absolute;
-            top: 10%;
-            left: 30%;
-            width: 40%;
-            height: 10%;
-
-        }
-        input[name="in_password"] {
-            position: absolute;
-            top: 30%;
-            left: 30%;
-            width: 40%;
-            height: 10%;
-        }
-        input[id="but4"] {
-            position: absolute;
-            bottom: 10%;
-            left: 10%;
-            width: 40%;
-            height: 10%;
-        }
-        input[id="but1"] {
-            position: absolute;
-            bottom: 10%;
-            right: 10%;
-            width: 40%;
-            height: 10%;
-        }
-
-
-    </style>
+    <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/auth.css') }}">
 </head>
 <body>
 <div class="auth">
-    <p id="name">Имя<input name="in_name" type="text" maxlength="50"></p>
-    <p id="pass">Пароль<input name="in_password" type="text" maxlength="50"></p>
+    <input id="in_name" type="text" maxlength="50" placeholder="Ваше имя">
+    <input id="in_password" type="text" maxlength="50" placeholder="Ваш пароль" >
     <input id="but4" type="button" value="Войти">
     <input id="but1" type="button" value="Зарегистрироваться">
 </div>
@@ -108,8 +65,8 @@
         });
 
         $('#but4').on('click',function(){
-            let name=$('[name="in_name"]').val();
-            let password=$('[name="in_password"]').val();
+            let name=$('[id="in_name"]').val();
+            let password=$('[id="in_password"]').val();
             if (name && password){
                 $.post("/auth",{subfunction:'auth',in_name:name,in_password:password},
                     function (response){
