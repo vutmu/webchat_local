@@ -7,23 +7,19 @@
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/auth.css') }}">
 </head>
 <body>
-<div class="auth">
-    <input id="in_name" type="text" maxlength="50" placeholder="Ваше имя">
-    <input id="in_password" type="text" maxlength="50" placeholder="Ваш пароль" >
-    <input id="but4" type="button" value="Войти">
-    <input id="but1" type="button" value="Зарегистрироваться">
+<div class="dialog auth">
+    <input id="in_name" class="namefield" type="text" maxlength="50" placeholder="Ваше имя">
+    <input id="in_password" class="passfield" type="text" maxlength="50" placeholder="Ваш пароль" >
+    <button id="but4" class="left-but">Войти</button>
+    <button id="but1">Зарегистрироваться</button>
 </div>
-<div class= "par1" style="display: none">
-    <p><label for="your_email">Куда вам отправить письмо?</label>
-        <input id="your_email" type="text" maxlength="50"></p>
-    <p><label for="your_name">Придумайте ваше имя</label>
-        <input id="your_name" type="text" maxlength="50"></p>
-    <p><label for="your_password">Придумайте ваш пороль</label>
-        <input id="your_password" type="text" maxlength="50"></p>
-    <p><input id="but2" type="button" value="Поехали!"></p>
-    <p><label for="check_code">Проверочный код из письма:</label>
-        <input id="check_code" type="text" maxlength="50">
-        <input id="but3" type="button" value="Валидация"></p>
+<div class= "dialog par1">
+    <input id="your_name" class="namefield" type="text" maxlength="50" placeholder="Придумайте Ваше имя)">
+    <input id="your_password" class="passfield" type="text" maxlength="50" placeholder="Придумайте Ваш пароль)">
+    <input id="your_email" type="text" maxlength="50" placeholder="Куда Вам отправить письмо?">
+    <button id="but2" class="left-but">Поехали!</button>
+    <input id="check_code" type="text" maxlength="50" placeholder="проверочный код">
+    <button id="but3">Валидация</button>
 
 </div>
 <script>
@@ -32,6 +28,7 @@
 
 
         $("#but1").on('click',function(){
+            $(".auth").toggle(300);
             $(".par1").toggle(300);});
 
         $('#but2').on('click',function(){

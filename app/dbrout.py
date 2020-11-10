@@ -1,6 +1,7 @@
 import psycopg2
 import os
 
+
 def pgdb(query):
     try:
         if 'DATABASE_URL' in os.environ:
@@ -25,5 +26,3 @@ def pgdb(query):
     except Exception as err:
         print(err)
         return [(-404,)]  # типа код недоступной базы
-
-

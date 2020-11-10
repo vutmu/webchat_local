@@ -1,4 +1,4 @@
-div.auth {
+div.dialog {
     position: absolute;
     top: 10%;
     left: 30%;
@@ -7,9 +7,13 @@ div.auth {
     border: solid;
     border-width: 0.5em;
     border-color: black;
-    text-align: center;
 }
-input[id="in_name"] {
+
+div.par1 {
+    display: none;
+}
+
+input.namefield {
     position: absolute;
     top: 10%;
     left: 30%;
@@ -17,24 +21,25 @@ input[id="in_name"] {
     height: 10%;
 
 }
-input[id="in_password"] {
+input.passfield {
     position: absolute;
     top: 30%;
     left: 30%;
     width: 40%;
     height: 10%;
 }
-input[id="but4"] {
+button.left-but {
     position: absolute;
     bottom: 10%;
     left: 10%;
     width: 40%;
     height: 10%;
 }
-input[id="but1"] {
+button[id="but1"] {
     position: absolute;
-    bottom: 10%;
-    right: 10%;
+    bottom: -10%;
+    right: 30%;
     width: 40%;
     height: 10%;
 }
+

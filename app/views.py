@@ -9,6 +9,7 @@ import time
 from werkzeug.utils import redirect
 
 from app.dbrout import pgdb
+from app.imgbb import imgrout
 
 app = Flask(__name__)
 app.secret_key = b'_5#y7L"F1Q2z\n\xec]/'
@@ -19,7 +20,8 @@ app.config.update(
     MAIL_USE_SSL=True,
     MAIL_DEFAULT_SENDER='wasmoh@yandex.ru',
     MAIL_USERNAME='wasmoh',
-    MAIL_PASSWORD='eluoqpoaykxcgjaz'
+    MAIL_PASSWORD='eluoqpoaykxcgjaz',
+    UPLOAD_FOLDER='app/static/uploads/'
 )
 mail = Mail(app)
 
@@ -139,28 +141,34 @@ def profile(user):
         return "вы не авторизованы!"
 
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
     if "username" in session:
-        if 'subfunction' not in request.args:
+        if request.method == 'GET':
+            if 'subfunction' not in request.args:
+                name = session['username']
+                query = f"SELECT * FROM accounts where name='{name}'"
+                dbresponse = pgdb(query)
+                name = dbresponse[-1][0]
+                avatar = dbresponse[-1][5]
+                data = {'name': name, 'avatar': avatar}
+                return render_template("settings.html", data=data)
+            elif request.args.get('subfunction') == 'get_pictures':
+                path = 'app/static/images'
+                pictures = [i for i in os.walk(path)]
+                data = {'pictures': pictures[-1][-1]}
+                return json.dumps(data)
+            elif request.args.get('subfunction') == 'change_avatar':
+                name = session['username']
+                avatar = request.args.get('avatar')
+                query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
+                pgdb(query)
+                return json.dumps({'status': '??'})
+        elif request.method == 'POST':
             name = session['username']
-            query = f"SELECT * FROM accounts where name='{name}'"
-            dbresponse = pgdb(query)
-            name = dbresponse[-1][0]
-            avatar = dbresponse[-1][5]
-            data = {'name': name, 'avatar': avatar}
-            return render_template("settings.html", data=data)
-        elif request.args.get('subfunction') == 'get_pictures':
-            path = 'app/static/images'
-            pictures = [i for i in os.walk(path)]
-            data = {'pictures': pictures[-1][-1]}
-            return json.dumps(data)
-        elif request.args.get('subfunction') == 'change_avatar':
-            name = session['username']
-            avatar = request.args.get('avatar')
-            query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
+            ref = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
+            query = f"UPDATE accounts SET avatar='{ref}' WHERE name='{name}'"
             pgdb(query)
-            return json.dumps({'status': '??'})
-
+            return redirect(url_for('settings'))
     else:
         return "вы не авторизованы!"
