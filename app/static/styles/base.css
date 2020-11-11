@@ -1,0 +1,28 @@
+.messblock {
+    width: 80%;
+    height: 25%;
+    background: #7a7070;
+    padding: 5px 20px 5px 5px;
+    border: solid 1px #a51616;
+    float: left;
+}
+.messages {
+    position: absolute;
+    left: 10%;
+    width: 80%;
+    height: 70%;
+    overflow: scroll;
+}
+
+.messblock > * {
+    display: inline-block;
+    float: left;
+}
+.messblock > a {
+    height: 100%;
+    width: 20%;
+}
+div.messblock > a > img {
+    height: 100%;
+    width: 100%;
+}

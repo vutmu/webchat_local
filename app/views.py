@@ -117,7 +117,8 @@ def base():
         elif request.method == 'POST':
             data = request.form
             if data['subfunction'] == 'send_mess':
-                query = (data['name'], data['text'], time.time())
+                query = (data['name'], data['text'], time.time())  # Возможно надо поменять data['name'] на session[
+                # 'username']
                 query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
                 dbresponse = pgdb(query)
                 return {'status': str(dbresponse[-1][-1])}
