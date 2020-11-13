@@ -123,7 +123,7 @@ def base():
                 dbresponse = pgdb(query)
                 return {'status': str(dbresponse[-1][-1])}
     else:
-        return "вы не авторизованы!"
+        return redirect(url_for('auth'))
 
 
 @app.route('/profile/<user>')
@@ -139,7 +139,7 @@ def profile(user):
         else:
             return "такого челика нету!"
     else:
-        return "вы не авторизованы!"
+        return redirect(url_for('auth'))
 
 
 @app.route('/settings', methods=['GET', 'POST'])
@@ -172,4 +172,4 @@ def settings():
             pgdb(query)
             return redirect(url_for('settings'))
     else:
-        return "вы не авторизованы!"
+        return redirect(url_for('auth'))
