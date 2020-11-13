@@ -10,6 +10,7 @@ from werkzeug.utils import redirect
 
 from app.dbrout import pgdb
 from app.imgbb import imgrout
+from app.sessions import sessions
 
 app = Flask(__name__)
 app.secret_key = b'_5#y7L"F1Q2z\n\xec]/'
@@ -127,19 +128,17 @@ def base():
 
 
 @app.route('/profile/<user>')
+@sessions
 def profile(user):
-    if "username" in session:
-        query = f"SELECT * FROM accounts where name='{user}'"
-        dbresponse = pgdb(query)
-        if len(dbresponse) > 0:
-            name = dbresponse[-1][0]
-            avatar = dbresponse[-1][5]
-            data = {'name': name, 'avatar': avatar}
-            return render_template("profile.html", data=data)
-        else:
-            return "такого челика нету!"
+    query = f"SELECT * FROM accounts where name='{user}'"
+    dbresponse = pgdb(query)
+    if len(dbresponse) > 0:
+        name = dbresponse[-1][0]
+        avatar = dbresponse[-1][5]
+        data = {'name': name, 'avatar': avatar}
+        return render_template("profile.html", data=data)
     else:
-        return redirect(url_for('auth'))
+        return "такого челика нету!"
 
 
 @app.route('/settings', methods=['GET', 'POST'])
