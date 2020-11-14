@@ -8,4 +8,5 @@ def sessions(view_function):
             return view_function(*args, **kwargs)
         else:
             return redirect(url_for('auth'))
+    wrapper.__name__ = view_function.__name__
     return wrapper

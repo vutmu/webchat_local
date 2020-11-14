@@ -84,47 +84,45 @@ def auth():
 
 @app.route('/dbfail')
 def dbfail():
-    return "база данных недоступна!"
+    return "база данных недоступна!"  # TODO это надо переделать
 
 
 @app.route('/base', methods=['GET', 'POST'])
+@sessions
 def base():
-    if 'username' in session:
-        if request.method == 'GET':
-            if 'subfunction' not in request.args:
-                name = session['username']
-                query = f"SELECT avatar from accounts WHERE name='{name}'"
-                dbresponse = pgdb(query)
-                avatar = dbresponse[-1][-1]
-                data = {'name': name, 'avatar': avatar}
-                return render_template('base.html', data=data)
-            elif request.args.get('subfunction') == 'get_mess':
-                last_id = request.args.get('last_id')
-                query = f"SELECT messages.id, messages.name, message, posting_time, avatar " \
-                        f"FROM messages join accounts on " \
-                        f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
-                dbresponse = pgdb(query)
-                if dbresponse and dbresponse[-1][-1] == -404:
-                    posts = {'posts': '-404'}
-                    return json.dumps(posts)
-                else:
-                    posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in
-                             dbresponse]
-                    posts = {'posts': posts}
-                    return json.dumps(posts)
-            elif request.args.get('subfunction') == 'logout':
-                session.pop('username', None)
-                return json.dumps({'status': 'logout'})
-        elif request.method == 'POST':
-            data = request.form
-            if data['subfunction'] == 'send_mess':
-                query = (data['name'], data['text'], time.time())  # Возможно надо поменять data['name'] на session[
-                # 'username']
-                query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
-                dbresponse = pgdb(query)
-                return {'status': str(dbresponse[-1][-1])}
-    else:
-        return redirect(url_for('auth'))
+    if request.method == 'GET':
+        if 'subfunction' not in request.args:
+            name = session['username']
+            query = f"SELECT avatar from accounts WHERE name='{name}'"
+            dbresponse = pgdb(query)
+            avatar = dbresponse[-1][-1]
+            data = {'name': name, 'avatar': avatar}
+            return render_template('base.html', data=data)
+        elif request.args.get('subfunction') == 'get_mess':
+            last_id = request.args.get('last_id')
+            query = f"SELECT messages.id, messages.name, message, posting_time, avatar " \
+                    f"FROM messages join accounts on " \
+                    f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
+            dbresponse = pgdb(query)
+            if dbresponse and dbresponse[-1][-1] == -404:
+                posts = {'posts': '-404'}
+                return json.dumps(posts)
+            else:
+                posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in
+                         dbresponse]
+                posts = {'posts': posts}
+                return json.dumps(posts)
+        elif request.args.get('subfunction') == 'logout':
+            session.pop('username', None)
+            return json.dumps({'status': 'logout'})
+    elif request.method == 'POST':
+        data = request.form
+        if data['subfunction'] == 'send_mess':
+            query = (data['name'], data['text'], time.time())  # Возможно надо поменять data['name'] на session[
+            # 'username']
+            query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
+            dbresponse = pgdb(query)
+            return {'status': str(dbresponse[-1][-1])}
 
 
 @app.route('/profile/<user>')
@@ -142,33 +140,31 @@ def profile(user):
 
 
 @app.route('/settings', methods=['GET', 'POST'])
+@sessions
 def settings():
-    if "username" in session:
-        if request.method == 'GET':
-            if 'subfunction' not in request.args:
-                name = session['username']
-                query = f"SELECT * FROM accounts where name='{name}'"
-                dbresponse = pgdb(query)
-                name = dbresponse[-1][0]
-                avatar = dbresponse[-1][5]
-                data = {'name': name, 'avatar': avatar}
-                return render_template("settings.html", data=data)
-            elif request.args.get('subfunction') == 'get_pictures':
-                path = 'app/static/images'
-                pictures = [i for i in os.walk(path)]
-                data = {'pictures': pictures[-1][-1]}
-                return json.dumps(data)
-            elif request.args.get('subfunction') == 'change_avatar':
-                name = session['username']
-                avatar = request.args.get('avatar')
-                query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
-                pgdb(query)
-                return json.dumps({'status': '??'})
-        elif request.method == 'POST':
+    if request.method == 'GET':
+        if 'subfunction' not in request.args:
             name = session['username']
-            ref = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
-            query = f"UPDATE accounts SET avatar='{ref}' WHERE name='{name}'"
+            query = f"SELECT * FROM accounts where name='{name}'"
+            dbresponse = pgdb(query)
+            name = dbresponse[-1][0]
+            avatar = dbresponse[-1][5]
+            data = {'name': name, 'avatar': avatar}
+            return render_template("settings.html", data=data)
+        elif request.args.get('subfunction') == 'get_pictures':
+            path = 'app/static/images'
+            pictures = [i for i in os.walk(path)]
+            data = {'pictures': pictures[-1][-1]}
+            return json.dumps(data)
+        elif request.args.get('subfunction') == 'change_avatar':
+            name = session['username']
+            avatar = request.args.get('avatar')
+            query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
             pgdb(query)
-            return redirect(url_for('settings'))
-    else:
-        return redirect(url_for('auth'))
+            return json.dumps({'status': '??'})
+    elif request.method == 'POST':
+        name = session['username']
+        ref = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
+        query = f"UPDATE accounts SET avatar='{ref}' WHERE name='{name}'"
+        pgdb(query)
+        return redirect(url_for('settings'))
