@@ -132,8 +132,8 @@ def profile(user):
     dbresponse = pgdb(query)
     if len(dbresponse) > 0:
         name = dbresponse[-1][0]
-        avatar = dbresponse[-1][5]
-        data = {'name': name, 'avatar': avatar}
+        full_avatar = dbresponse[-1][6]
+        data = {'name': name, 'full_avatar': full_avatar}
         return render_template("profile.html", data=data)
     else:
         return "такого челика нету!"
@@ -151,7 +151,7 @@ def settings():
             avatar = dbresponse[-1][5]
             data = {'name': name, 'avatar': avatar}
             return render_template("settings.html", data=data)
-        elif request.args.get('subfunction') == 'get_pictures':
+        elif request.args.get('subfunction') == 'get_pictures':  # TODO переделать в коллекцию, пофиксить
             path = 'app/static/images'
             pictures = [i for i in os.walk(path)]
             data = {'pictures': pictures[-1][-1]}
@@ -164,7 +164,9 @@ def settings():
             return json.dumps({'status': '??'})
     elif request.method == 'POST':
         name = session['username']
-        ref = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
-        query = f"UPDATE accounts SET avatar='{ref}' WHERE name='{name}'"
+        data = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
+        avatar = data['avatar']
+        full_avatar = data['full_avatar']
+        query = f"UPDATE accounts SET avatar='{avatar}', full_avatar='{full_avatar}' WHERE name='{name}'"
         pgdb(query)
         return redirect(url_for('settings'))

@@ -18,7 +18,7 @@ def upload_file(file, path):
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(path, filename))
-        return path + filename  # TODO тут нужно возвращать адрес загруженного файла
+        return path + filename
 
 
 def download_to_imgbb(pathfile):
@@ -36,7 +36,9 @@ def download_to_imgbb(pathfile):
         data = res.json()
         data = data['data']
         ref = data['url']
-        return ref
+        thumb = data['thumb']
+        thumb = thumb['url']
+        return {'avatar': thumb, 'full_avatar': ref}
     else:
         print("ERROR")
         print("Server Response: " + str(res.status_code))
