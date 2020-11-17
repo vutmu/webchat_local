@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-100" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>WasmohWeb</title>
@@ -7,14 +7,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 </head>
-<body>
-  <div class="container x1 h-100">
-      <div class="row">
+<body class="h-100">
+  <div class="container h-100">
+      <div class="row h-25">
         <span class="col-7 h-50" id="your_name">Добро пожаловать,{{data['name']}}!</span>
         <a class="col-3" href="../settings"><img src={{data['avatar']}} alt="avatar"></a>
-          <button class="col-2 btn btn-secondary" id="but2" type="button">Выйти</button>
+          <button class="col-2 btn btn-secondary h-25" id="but2" type="button">Выйти</button>
       </div>
-      <div class="overflow-auto messages"></div>
+      <div class="overflow-auto h-50 messages"></div>
       <div class="row">
         <textarea class="col-10" id="your_message" placeholder="введите текст" maxlength="1000" rows="auto"></textarea>
         <input class="col-2" id="but1" type="button" value="Отправить">
