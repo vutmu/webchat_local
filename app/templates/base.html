@@ -7,17 +7,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 </head>
-<body >
-
-<div style="">Добро пожаловать,<span id="your_name">{{data['name']}}</span>!</div><br>
-<a href="../settings"> <img src={{data['avatar']}} alt="avatar" height="3%" width="3%"></a><br>
-<input id="but2" type="button" value="выйти">
-<p><label for="your_message">Введите текст:</label></p>
-<p><textarea id="your_message" cols="200" maxlength="1000" rows="5"> </textarea></p>
-<input id="but1" type="button" value="Отправить">
-
-<div class="container messages"></div>
-<script>
+<body>
+  <div class="container x1 h-100">
+      <div class="row">
+        <span class="col-7 h-50" id="your_name">Добро пожаловать,{{data['name']}}!</span>
+        <a class="col-3" href="../settings"><img src={{data['avatar']}} alt="avatar"></a>
+          <button class="col-2 btn btn-secondary" id="but2" type="button">Выйти</button>
+      </div>
+      <div class="overflow-auto messages"></div>
+      <div class="row">
+        <textarea class="col-10" id="your_message" placeholder="введите текст" maxlength="1000" rows="auto"></textarea>
+        <input class="col-2" id="but1" type="button" value="Отправить">
+      </div>
+  </div>
+  <script>
     setInterval(get_mess,2000)
 
     function pretty_print(json)
@@ -47,10 +50,10 @@
             {
                 let mess_id=value['id']
                 let ref="../profile/"+value['author']
-                let d=$('<div>').attr("id",mess_id).attr("class","container messblock")
+                let d=$('<div>').attr("id",mess_id).attr("class","h-25 w-100 messblock")
                 $('.messages').append(d);
                 let avatar=value['avatar']
-                let a= $('<a><img class = "img-fluid" src='+avatar+' alt="avatar"></a>').attr("href",ref).attr("class","container ref")
+                let a= $('<a><img class = "img-fluid" src='+avatar+' alt="avatar"></a>').attr("href",ref).attr("class","ref")
                 $('[id='+mess_id+'].messblock').append(a);
                 let p=$('<p>').attr("class","h3 intext").html(pretty_print(value))
                 $('[id='+mess_id+'].messblock').append(p);
@@ -82,6 +85,5 @@
         })
     })
 </script>
-
 </body>
 </html>

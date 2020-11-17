@@ -1,24 +1,36 @@
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+
+.x1 {
+    height: 100%;
+}
 .messblock {
-    width: 80%;
-    height: 25%;
+    /*width: 100%;
+    height: 25%;*/
     background: #7a7070;
     padding: 5px 20px 5px 5px;
     border: solid 1px #a51616;
     float: left;
 }
 .messages {
-    position: absolute;
-    left: 10%;
-    width: 80%;
     height: 70%;
-    overflow: scroll;
 }
 
 .messblock > * {
     display: inline-block;
     float: left;
 }
+button#but2 {
+    height: 50%;
+}
+
+/*
 .messblock > a {
     height: 100%;
     width: 20%;
 }
+*/
