@@ -1,13 +1,3 @@
-/*html {
-    height: 100%;
-}*/
-/*body {
-    height: 100%;
-}*/
-
-/*.x1 {
-    height: 100%;
-}*/
 .messblock {
     /*width: 100%;
     height: 25%;*/
@@ -16,20 +6,20 @@
     border: solid 1px #a51616;
     float: left;
 }
-/*.messages {
-    height: 70%;
-}*/
 
 .messblock > * {
     display: inline-block;
     float: left;
 }
-/*button#but2 {
-    height: 50%;
-}*/
 
 
 .messblock > a {
     height: 100%;
     width: 20%;
 }
+body {
+    background-image: linear-gradient(white, blue);
+}
+/*.x1 {
+    background-color: red;
+}*/
