@@ -7,13 +7,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/auth.css') }}">
 </head>
-<body class="h-100">
-<div class="container-sm h-100 auth">
+<body class="container-fluid h-100">
+<div class="h-100 auth">
     <input id="in_name" class="namefield" type="text" maxlength="50" placeholder="Ваше имя">
     <input id="in_password" class="passfield" type="text" maxlength="50" placeholder="Ваш пароль" >
     <button id="but4" class="btn btn-primary left-but">Войти</button>
 </div>
-<div class= "par1">
+<div class= "h-100 par1">
     <input id="your_name" class="namefield" type="text" maxlength="50" placeholder="Придумайте Ваше имя)">
     <input id="your_password" class="passfield" type="text" maxlength="50" placeholder="Придумайте Ваш пароль)">
     <input id="your_email" type="text" maxlength="50" placeholder="Куда Вам отправить письмо?">

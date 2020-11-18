@@ -11,11 +11,12 @@
 
 div.auth {
     background-image: -webkit-linear-gradient(white, blue);
-
 }
 
 div.par1 {
     display: none;
+    background-image: -webkit-linear-gradient(green, white);
+
 }
 
 input.namefield {
