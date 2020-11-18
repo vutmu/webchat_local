@@ -18,7 +18,7 @@
     width: 20%;
 }
 body {
-    background-image: linear-gradient(white, blue);
+    background-image: -webkit-linear-gradient(white, blue);
 }
 /*.x1 {
     background-color: red;
