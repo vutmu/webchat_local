@@ -17,9 +17,13 @@
     height: 100%;
     width: 20%;
 }
-body {
+/*body {
+    background-image: -webkit-linear-gradient(white, blue);
+}*/
+.main {
     background-image: -webkit-linear-gradient(white, blue);
 }
+
 /*.x1 {
     background-color: red;
 }*/

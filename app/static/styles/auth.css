@@ -1,4 +1,4 @@
-div.dialog {
+/*div.dialog {
     position: absolute;
     top: 10%;
     left: 30%;
@@ -7,6 +7,11 @@ div.dialog {
     border: solid;
     border-width: 0.5em;
     border-color: black;
+}*/
+
+div.auth {
+    background-image: -webkit-linear-gradient(white, blue);
+
 }
 
 div.par1 {
