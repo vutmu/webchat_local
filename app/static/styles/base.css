@@ -1,7 +1,7 @@
 .messblock {
     /*width: 100%;
     height: 25%;*/
-    background: #7a7070;
+    /*background: #7a7070;*/
     padding: 5px 20px 5px 5px;
     border: solid 1px #a51616;
     float: left;
@@ -24,6 +24,10 @@
     background-image: -webkit-linear-gradient(white, blue);
 }
 
-/*.x1 {
-    background-color: red;
-}*/
+.messages {
+    height: 80%;
+    border: solid 3px yellow;
+}
+.x1 {
+    height: 5%;
+}
