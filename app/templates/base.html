@@ -50,7 +50,7 @@
             {
                 let mess_id=value['id']
                 let ref="../profile/"+value['author']
-                let d=$('<div>').attr("id",mess_id).attr("class","h-25 w-100 messblock")
+                let d=$('<div>').attr("id",mess_id).attr("class","w-100 messblock")
                 $('.messages').append(d);
                 let avatar=value['avatar']
                 let a= $('<a><img class = "img-fluid rounded-circle" src='+avatar+' alt="avatar"></a>').attr("href",ref).attr("class","ref")

@@ -5,6 +5,7 @@
     padding: 5px 20px 5px 5px;
     border: solid 1px #a51616;
     float: left;
+    min-height: 25%;
 }
 
 .messblock > * {
@@ -30,4 +31,13 @@
 }
 .x1 {
     height: 5%;
+    font-size: 2rem;
+
+}
+.x3 {
+    font-size: 2rem;
+
+}
+.btn {
+    font-size: 1.5rem;
 }
