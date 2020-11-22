@@ -102,7 +102,7 @@ def base():
             last_id = request.args.get('last_id')
             query = f"SELECT messages.id, messages.name, message, posting_time, avatar " \
                     f"FROM messages join accounts on " \
-                    f"messages.name=accounts.name WHERE messages.id>{last_id} LIMIT 100 "
+                    f"messages.name=accounts.name WHERE messages.id>{last_id} order by messages.id LIMIT 100 "
             dbresponse = pgdb(query)
             if dbresponse and dbresponse[-1][-1] == -404:
                 posts = {'posts': '-404'}

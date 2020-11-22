@@ -53,9 +53,9 @@
                 let d=$('<div>').attr("id",mess_id).attr("class","w-100 messblock")
                 $('.messages').append(d);
                 let avatar=value['avatar']
-                let a= $('<a><img class = "img-fluid rounded-circle" src='+avatar+' alt="avatar"></a>').attr("href",ref).attr("class","ref")
+                let a= $('<a><img class = "img-fluid rounded-circle" src='+avatar+' alt="avatar"></a>').attr("href",ref)
                 $('[id='+mess_id+'].messblock').append(a);
-                let p=$('<p>').attr("class","h3 intext").html(pretty_print(value))
+                let p=$('<p>').attr("class","intext").html(pretty_print(value))
                 $('[id='+mess_id+'].messblock').append(p);
                 $('.messages').scrollTop(9999)
             });

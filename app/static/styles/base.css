@@ -8,15 +8,10 @@
     min-height: 25%;
 }
 
-.messblock > * {
-    display: inline-block;
-    float: left;
-}
-
-
 .messblock > a {
-    height: 100%;
+   /* height: 100%;*/
     width: 20%;
+    float: left;
 }
 /*body {
     background-image: -webkit-linear-gradient(white, blue);
@@ -40,4 +35,8 @@
 }
 .btn {
     font-size: 1.5rem;
+}
+.intext {
+    font-size: 1.5rem;
+    text-align: justify;
 }
