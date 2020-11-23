@@ -27,11 +27,14 @@
     {
         let author=json['author']
         let body=json['body']
+        let re=/\\n/gi
+        let edit_body=body.replace(re,'<br>')
+        //console.log(edit_body)
         let mstime=Math.round(json['posttime'])*1000
         let posttime=new Date(mstime)
         let myPattern = new RegExp("\\d{2}:\\d{2}");
         posttime=myPattern.exec(posttime.toString())
-        return author+' написал(а) в '+posttime+':<br> '+body
+        return author+' написал(а) в '+posttime+':<br> '+edit_body
     }
     //Изменить параметры пагинации
 
