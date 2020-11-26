@@ -1,17 +1,15 @@
 .messblock {
     /*width: 100%;
     height: 25%;*/
-    /*background: #7a7070;*/
-    padding: 5px 20px 5px 5px;
+    /*background: #7a7070;
+    padding: 5px 20px 5px 5px;*/
     border: solid 1px #a51616;
-    float: left;
+    /*float: left;*/
     min-height: 25%;
 }
 
 .messblock > a {
-   /* height: 100%;*/
-    width: 20%;
-    float: left;
+    border: solid 1px #a51616;
 }
 /*body {
     background-image: -webkit-linear-gradient(white, blue);
@@ -20,17 +18,25 @@
     background-image: -webkit-linear-gradient(white, blue);
 }
 
+.messblock > a > img {
+    max-width: 50%;
+    height: auto;
+}
+
 .messages {
     height: 80%;
     border: solid 3px yellow;
 }
 .x1 {
+    border: solid 1px #a51616;
     height: 5%;
     font-size: 2rem;
 
 }
 .x3 {
     font-size: 2rem;
+    border: solid 1px #a51616;
+
 
 }
 .btn {
@@ -38,5 +44,8 @@
 }
 .intext {
     font-size: 1.5rem;
-    text-align: justify;
+    /*text-align: justify;*/
 }
+/*#but1 {
+    justify: right;
+}*/

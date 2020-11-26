@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>WasmohWeb</title>
@@ -7,20 +7,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 </head>
-<body class="h-100 main">
-  <div class="container-fluid h-100">
-      <div class="row x1">
+<body class="main">
+<div class="container-fluid vh-100">
+    <div class="row x1">
         <span class="col-7 h-50" id="your_name">Добро пожаловать,{{data['name']}}!</span>
         <a class="col-3 h-100" href="../settings"><img src={{data['avatar']}} class="h-100" alt="avatar"></a>
-          <button class="col-2 btn btn-secondary h-100" id="but2" type="button">Выйти</button>
-      </div>
-      <div class="overflow-auto messages"></div>
-      <div class="row h-25 x3">
+        <button class="col-2 btn btn-secondary h-100" id="but2" type="button">Выйти</button>
+    </div>
+    <div class="row overflow-auto  messages"></div>
+    <div class="row h-25 x3">
         <textarea class="col-9 m-2 h-50" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
-          <button class="col-2 m-2 btn btn-success h-50" id="but1" type="button">Отправить</button>
-      </div>
-  </div>
-  <script>
+        <button class="col-2 m-2 btn btn-success h-50" id="but1" type="button">Отправить</button>
+    </div>
+</div>
+<script>
     setInterval(get_mess,2000)
 
     function pretty_print(json)
@@ -37,33 +37,34 @@
         return author+' написал(а) в '+posttime+':<br> '+edit_body
     }
     //Изменить параметры пагинации
-
-    function get_mess()
-    {
+    //
+    function get_mess() {
         let last_id = 0;
-        if ($("div").is(".messages div")){
+        if ($("div").is(".messages div")) {
             last_id = $('.messages > div:last-child').attr('id');
         }
-        $.get("/base",{ subfunction:'get_mess',last_id: last_id}, function(response)
-        {
+        $.get("/base", {subfunction: 'get_mess', last_id: last_id}, function (response) {
             let messages = $.parseJSON(response);
-            let posts=messages['posts'];
-            if (posts=='-404') {window.location="/dbfail"};
-            $.each(posts, function(index, value)
-            {
-                let mess_id=value['id']
-                let ref="../profile/"+value['author']
-                let d=$('<div>').attr("id",mess_id).attr("class","w-100 messblock")
-                $('.messages').append(d);
-                let avatar=value['avatar']
-                let a= $('<a><img class = "img-fluid rounded-circle" src='+avatar+' alt="avatar"></a>').attr("href",ref)
-                $('[id='+mess_id+'].messblock').append(a);
-                let p=$('<p>').attr("class","intext").html(pretty_print(value))
-                $('[id='+mess_id+'].messblock').append(p);
-                $('.messages').scrollTop(9999)
+            let posts = messages['posts'];
+            if (posts == '-404') {
+                window.location = "/dbfail"
+            }
+
+            $.each(posts, function (index, value) {
+                let mess_id = value['id']
+                let ref = "../profile/" + value['author']
+                let avatar = value['avatar']
+                let text = pretty_print(value)
+                let messblock = `
+                    <div class="row w-100 messblock" id=${mess_id}>
+                        <a class="col-2" href=${ref}><img src=${avatar} alt="avatarka"></a>
+                        <p class="col-10 intext">${text}</p>
+                    </div>`;
+                $('.messages').append(messblock)
             });
-        });
+        })
     }
+
 
 
     $(document).ready(function(){
