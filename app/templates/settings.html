@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Настройки {{data['name']}}</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
-</head>
-<body>
+{%extends "base_template.html"%}
+{%block content%}
 <a href="../base">На главную</a>
 <p>это страница настроек {{data['name']}}</p><br>
 <img src={{data['avatar']}} alt="avatar" id="avatar"><br>
@@ -42,5 +35,4 @@
         console.log('есть контакт')
     })
 </script>
-</body>
-</html>
+{%endblock%}

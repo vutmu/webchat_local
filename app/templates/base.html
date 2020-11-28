@@ -1,19 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>WasmohWeb</title>
-    <link rel="stylesheet" href="static/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+{%extends "base_template.html"%}
+{%block head%}
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
-</head>
-<body class="main">
-<div class="container-fluid vh-100">
-    <div class="row x1">
-        <span class="col-7 h-50" id="your_name">Добро пожаловать,{{data['name']}}!</span>
-        <a class="col-3 h-100" href="../settings"><img src={{data['avatar']}} class="h-100" alt="avatar"></a>
-        <button class="col-2 btn btn-secondary h-100" id="but2" type="button">Выйти</button>
+{%endblock%}
+{%block content%}
+<div class="container-fluid vh-100 main">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="../settings">Настройки</a>
+            </li>
+        </ul>
+        <button class="nav-link btn btn-secondary h-100 my-2 my-sm-0" id="but2" type="button">Выйти</button>
+
     </div>
+</nav>
+
+<!--        <span class="col-7 h-50" id="your_name">Добро пожаловать,{{data['name']}}!</span>-->
+<!--        <a class="col-3 h-100" href="../settings"><img src={{data['avatar']}} class="h-100" alt="avatar"></a>-->
+<!--        <button class="nav-link btn btn-secondary h-100" id="but2" type="button">Выйти</button>-->
+<!--    </div>-->
     <div class="row overflow-auto  messages"></div>
     <div class="row h-25 x3">
         <textarea class="col-9 m-2 h-50" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
@@ -68,6 +77,10 @@
 
 
     $(document).ready(function(){
+<!--        $('button.navbar-toggler').on('click',function (){-->
+<!--            $('div.navbar-collapse').attr('class','show')-->
+<!--            })-->
+
         $("#but1").on('click',function (){
             let json_data = {subfunction:'send_mess',name: "{{data['name']}}", text: $('#your_message').val()};
             $.post("/base", json_data);
@@ -89,5 +102,4 @@
         })
     })
 </script>
-</body>
-</html>
+{%endblock%}

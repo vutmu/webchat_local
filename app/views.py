@@ -67,7 +67,8 @@ def auth():
 
     elif request.method == 'GET':
         if 'subfunction' not in request.args:
-            return render_template('Authentification.html')
+            data = {'title': 'Аутентификация'}
+            return render_template('Authentification.html', data=data)
         elif request.args['subfunction'] == 'validation':
             checkcode = request.args.get('code')
             name = request.args.get('name')
@@ -96,7 +97,7 @@ def base():
             query = f"SELECT avatar from accounts WHERE name='{name}'"
             dbresponse = pgdb(query)
             avatar = dbresponse[-1][-1]
-            data = {'name': name, 'avatar': avatar}
+            data = {'name': name, 'avatar': avatar, 'title': 'чатик'}
             return render_template('base.html', data=data)
         elif request.args.get('subfunction') == 'get_mess':
             last_id = request.args.get('last_id')
@@ -133,7 +134,7 @@ def profile(user):
     if len(dbresponse) > 0:
         name = dbresponse[-1][0]
         full_avatar = dbresponse[-1][6]
-        data = {'name': name, 'full_avatar': full_avatar}
+        data = {'name': name, 'full_avatar': full_avatar, 'title': f'Профиль {name}'}
         return render_template("profile.html", data=data)
     else:
         return "такого челика нету!"
@@ -149,7 +150,7 @@ def settings():
             dbresponse = pgdb(query)
             name = dbresponse[-1][0]
             avatar = dbresponse[-1][5]
-            data = {'name': name, 'avatar': avatar}
+            data = {'name': name, 'avatar': avatar, 'title': f'Настройки {name}'}
             return render_template("settings.html", data=data)
         elif request.args.get('subfunction') == 'get_pictures':  # TODO переделать в коллекцию, пофиксить
             path = 'app/static/images'

@@ -1,8 +1,11 @@
-
+div {
+    position: fixed;
+    width: 100%;
+    height:100%;
+}
 div.auth {
     background-image: -webkit-linear-gradient(white, blue);
 }
-
 div.reg {
     display: none;
     background-image: -webkit-linear-gradient(green, white);
@@ -37,7 +40,7 @@ button {
 }
 
 .btn {
-    font-size: 2rem;
+    font-size: 1.1rem;
 
 }
 button.left-but {
