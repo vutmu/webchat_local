@@ -132,9 +132,10 @@ def profile(user):
     query = f"SELECT * FROM accounts where name='{user}'"
     dbresponse = pgdb(query)
     if len(dbresponse) > 0:
-        name = dbresponse[-1][0]
+        user = dbresponse[-1][0]
+        name = session['username']
         full_avatar = dbresponse[-1][6]
-        data = {'name': name, 'full_avatar': full_avatar, 'title': f'Профиль {name}'}
+        data = {'name': name, 'user': user, 'full_avatar': full_avatar, 'title': f'Профиль {user}'}
         return render_template("profile.html", data=data)
     else:
         return "такого челика нету!"
@@ -171,3 +172,20 @@ def settings():
         query = f"UPDATE accounts SET avatar='{avatar}', full_avatar='{full_avatar}' WHERE name='{name}'"
         pgdb(query)
         return redirect(url_for('settings'))
+
+
+@app.before_request
+def bef():
+    if session:
+        req = str(request)
+        if ('static' in req) or (request.method == 'GET' and 'subfunction' in request.args and request.args.get(
+                'subfunction') == 'get_mess'):
+            pass
+        else:
+            name = session['username']
+            last_seen = time.time()
+            query = f"UPDATE accounts SET last_seen='{last_seen}' WHERE name='{name}'"
+            pgdb(query)
+            print(f"{name} в онлайне по запросу {req} ")
+    else:
+        pass

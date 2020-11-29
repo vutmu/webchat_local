@@ -16,9 +16,9 @@
 }*/
 .main {
     background-image: -webkit-linear-gradient(white, blue);
-    position: fixed;
+    /*position: fixed;
     width: 100%;
-    height:100%;
+    height:100%;*/
 }
 
 .messblock > a {
@@ -26,16 +26,18 @@
 }
 
 .messages {
-    height: 80%;
+    /*height: 70%;*/
     border: solid 3px green;
 }
 
 .enterzone {
-    font-size: 1.5rem;
+    font-size: 1rem;
     border: solid 2px yellow;
+    Justify-content: space-between;
 }
 .btn {
-    font-size: 1.2rem;
+    font-size: 70%;
+    padding: 2px;
 }
 .intext {
     font-size: 1.5rem;

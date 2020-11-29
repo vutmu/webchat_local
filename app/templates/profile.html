@@ -1,8 +1,10 @@
 {%extends "base_template.html"%}
 {%block head%}
-<!--    <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/profile.css') }}">-->
+    <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/profile.css') }}">
 {%endblock%}
 {%block content%}
-    <h3>Это страница профиля для {{data['name']}}</h3>
+<div>
+    <h3>Это страница профиля для {{data['user']}}</h3>
     <img src={{data['full_avatar']}}><br>
+</div>
 {%endblock%}
