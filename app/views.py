@@ -119,7 +119,7 @@ def base():
     elif request.method == 'POST':
         data = request.form
         if data['subfunction'] == 'send_mess':
-            query = (data['name'], data['text'], time.time())  # Возможно надо поменять data['name'] на session[
+            query = (data['name'], data['text'], time.time())  #TODO Возможно надо поменять data['name'] на session[
             # 'username']
             query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
             dbresponse = pgdb(query)
@@ -172,6 +172,40 @@ def settings():
         query = f"UPDATE accounts SET avatar='{avatar}', full_avatar='{full_avatar}' WHERE name='{name}'"
         pgdb(query)
         return redirect(url_for('settings'))
+
+
+@app.route('/allusers', methods=['GET', 'POST'])
+@sessions
+def allusers():
+    if request.method == 'GET':
+        if 'subfunction' not in request.args:
+            name = session['username']
+            query = f"SELECT * FROM accounts WHERE status=true"
+            dbresponse = pgdb(query)
+            users = [{'username': i[0], 'avatar': i[5], 'last_seen': i[7]} for i in
+                     dbresponse]
+            print(users)
+            data = {'users': users, 'name': name, 'title': 'список юзеров'}
+            return render_template("allusers.html", data=data)
+    #     elif request.args.get('subfunction') == 'get_pictures':  # TODO переделать в коллекцию, пофиксить
+    #         path = 'app/static/images'
+    #         pictures = [i for i in os.walk(path)]
+    #         data = {'pictures': pictures[-1][-1]}
+    #         return json.dumps(data)
+    #     elif request.args.get('subfunction') == 'change_avatar':
+    #         name = session['username']
+    #         avatar = request.args.get('avatar')
+    #         query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
+    #         pgdb(query)
+    #         return json.dumps({'status': '??'})
+    # elif request.method == 'POST':
+    #     name = session['username']
+    #     data = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
+    #     avatar = data['avatar']
+    #     full_avatar = data['full_avatar']
+    #     query = f"UPDATE accounts SET avatar='{avatar}', full_avatar='{full_avatar}' WHERE name='{name}'"
+    #     pgdb(query)
+    #     return redirect(url_for('settings'))
 
 
 @app.before_request

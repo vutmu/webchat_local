@@ -1,0 +1,28 @@
+{%extends "base_template.html"%}
+{%block content%}
+<div class="overflow-auto h-75 allusers"></div>
+<script>
+    $(document).ready(function(){
+        let users={{data['users']|tojson}}
+        $.each(users, function (index, value) {
+            let name = value['username']
+            let avatar = value['avatar']
+            let last_seen = value['last_seen']
+            let ref = "../profile/" + name
+            let id = index
+            let userblock = `
+                <div class="container w-100 userblock" id=${id}>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <a  href=${ref}><img src=${avatar} class="img-fluid" alt="avatarka"></a>
+                            </div>
+                            <div class="col-sm-10 lastseen">${last_seen}</div>
+                        </div>
+                        <div class="row">${name}</div>
+                        <div class="row">${ref}</div>
+                </div>`;
+            $('.allusers').append(userblock)
+        })
+    })
+</script>
+{%endblock%}
