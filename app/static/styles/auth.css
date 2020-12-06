@@ -1,59 +1,57 @@
-div {
+/*div {
     position: fixed;
     width: 100%;
     height:100%;
-}
+}*/
 div.auth {
     background-image: -webkit-linear-gradient(white, blue);
 }
 div.reg {
     display: none;
-    background-image: -webkit-linear-gradient(green, white);
+    background-image: -webkit-linear-gradient(white, green);
 }
-input {
+/*input {
     position: absolute;
     width: 70%;
     height: 10%;
     left: 15%;
     font-size: 2rem;
 
-}
-input.namefield {
+}*/
+/*input.namefield {
     top: 10%;
-}
-input.passfield {
+}*/
+/*input.passfield {
     top: 30%;
-}
-input#your_email {
+}*/
+/*input#your_email {
     top: 50%;
-}
-input#check_code {
+}*/
+/*input#check_code {
     top: 70%;
     width: 30%;
 
-}
+}*/
 
-button {
+/*button {
     position: absolute;
     width: 30%;
     height: 10%;
-}
+}*/
 
-.btn {
+/*.btn {
     font-size: 1.1rem;
-
-}
-button.left-but {
+}*/
+/*button.left-but {
     bottom: 5%;
     left: 10%;
-}
-button.right-but {
+}*/
+/*button.right-but {
     bottom: 5%;
     right: 10%;
-
-}
-button.center-but {
+}*/
+/*button.center-but {
     top: 70%;
     right: 15%;
-}
+}*/
 

@@ -3,12 +3,16 @@
 <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 {%endblock%}
 {%block content%}
-<div class="container-fluid vh-100 main">
-    <div class="overflow-auto h-75 messages"></div>
-    <div class="row p-2 enterzone">
-        <textarea class="col-8 m-1 " id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
-        <button class="col-3 m-1  btn btn-success " id="but1" type="button">Отправить</button>
+<div class="container-fluid row vh-100 main">
+    <div class="container col-md-6 vh-100">
+        <div class="overflow-auto h-75 messages"></div>
+        <div class="row enterzone">
+            <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
+            <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
+        </div>
+        <button class="btn btn-success" type="button" id="downbut">Вниз</button>
     </div>
+    <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">some usefull block</div>
 </div>
 <script>
     setInterval(get_mess,2000)
@@ -19,15 +23,13 @@
         let body=json['body']
         let re=/\\n/gi
         let edit_body=body.replace(re,'<br>')
-        //console.log(edit_body)
         let mstime=Math.round(json['posttime'])*1000
         let posttime=new Date(mstime)
         let myPattern = new RegExp("\\d{2}:\\d{2}");
         posttime=myPattern.exec(posttime.toString())
         return author+' написал(а) в '+posttime+':<br> '+edit_body
     }
-    //Изменить параметры пагинации
-    //
+
     function get_mess() {
         let last_id = 0;
         if ($("div").is(".messages div")) {
@@ -51,7 +53,7 @@
                             <div class="col-sm-2">
                                 <a  href=${ref}><img src=${avatar} class="img-fluid" alt="avatarka"></a>
                             </div>
-                            <div class="col-sm-10 intext">${text}</div>
+                            <div class="col-sm-9 intext">${text}</div>
                         </div>
                     </div>`;
                 $('.messages').append(messblock)
@@ -63,7 +65,7 @@
 
     $(document).ready(function(){
         $("#but1").on('click',function (){
-            let json_data = {subfunction:'send_mess',name: "{{data['name']}}", text: $('#your_message').val()};
+            let json_data = {subfunction:'send_mess', text: $('#your_message').val()};
             $.post("/base", json_data);
             $('#your_message').val("")
         })

@@ -118,9 +118,9 @@ def base():
             return json.dumps({'status': 'logout'})
     elif request.method == 'POST':
         data = request.form
+        name = session['username']
         if data['subfunction'] == 'send_mess':
-            query = (data['name'], data['text'], time.time())  #TODO Возможно надо поменять data['name'] на session[
-            # 'username']
+            query = (name, data['text'], time.time())
             query = f"INSERT INTO messages (name, message, posting_time) VALUES {query}"
             dbresponse = pgdb(query)
             return {'status': str(dbresponse[-1][-1])}
@@ -187,25 +187,6 @@ def allusers():
             print(users)
             data = {'users': users, 'name': name, 'title': 'список юзеров'}
             return render_template("allusers.html", data=data)
-    #     elif request.args.get('subfunction') == 'get_pictures':  # TODO переделать в коллекцию, пофиксить
-    #         path = 'app/static/images'
-    #         pictures = [i for i in os.walk(path)]
-    #         data = {'pictures': pictures[-1][-1]}
-    #         return json.dumps(data)
-    #     elif request.args.get('subfunction') == 'change_avatar':
-    #         name = session['username']
-    #         avatar = request.args.get('avatar')
-    #         query = f"UPDATE accounts SET avatar='{avatar}' WHERE name='{name}'"
-    #         pgdb(query)
-    #         return json.dumps({'status': '??'})
-    # elif request.method == 'POST':
-    #     name = session['username']
-    #     data = imgrout(request.files['file'], app.config['UPLOAD_FOLDER'])
-    #     avatar = data['avatar']
-    #     full_avatar = data['full_avatar']
-    #     query = f"UPDATE accounts SET avatar='{avatar}', full_avatar='{full_avatar}' WHERE name='{name}'"
-    #     pgdb(query)
-    #     return redirect(url_for('settings'))
 
 
 @app.before_request
@@ -220,6 +201,5 @@ def bef():
             last_seen = time.time()
             query = f"UPDATE accounts SET last_seen='{last_seen}' WHERE name='{name}'"
             pgdb(query)
-            print(f"{name} в онлайне по запросу {req} ")
     else:
         pass
