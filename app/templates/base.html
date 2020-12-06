@@ -3,14 +3,13 @@
 <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 {%endblock%}
 {%block content%}
-<div class="container-fluid row vh-100 main">
-    <div class="container col-md-6 vh-100">
+<div class="row vh-100 main">
+    <div class="container col-md-6 vh-100 firstblock">
         <div class="overflow-auto h-75 messages"></div>
         <div class="row enterzone">
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
             <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
         </div>
-        <button class="btn btn-success" type="button" id="downbut">Вниз</button>
     </div>
     <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">some usefull block</div>
 </div>
@@ -64,6 +63,11 @@
 
 
     $(document).ready(function(){
+        $("#downbut").on('click',function(){
+            $(".firstblock").toggle(300);
+            $(".someblock").toggle(300);});
+
+
         $("#but1").on('click',function (){
             let json_data = {subfunction:'send_mess', text: $('#your_message').val()};
             $.post("/base", json_data);
