@@ -25,8 +25,8 @@ app.config.update(
     MAIL_USE_TLS=False,
     MAIL_USE_SSL=True,
     MAIL_DEFAULT_SENDER='wasmoh@yandex.ru',
-    MAIL_USERNAME='wasmoh',
-    MAIL_PASSWORD='eluoqpoaykxcgjaz',
+    MAIL_USERNAME=os.environ['MAIL_USERNAME'],
+    MAIL_PASSWORD=os.environ['MAIL_PASSWORD'],
     UPLOAD_FOLDER='app/static/uploads/'
 )
 mail = Mail(app)
