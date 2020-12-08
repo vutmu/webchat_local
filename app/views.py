@@ -13,7 +13,7 @@ from app.imgbb import imgrout
 from app.sessions import sessions
 
 app = Flask(__name__)
-app.secret_key = b'_5#y7L"F1Q2z\n\xec]/'
+app.secret_key = os.environ['APP_SECRET_KEY']
 app.config.update(
     MAIL_SERVER='smtp.yandex.ru',
     MAIL_PORT=465,
