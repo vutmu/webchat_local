@@ -22,7 +22,7 @@ def upload_file(file, path):
 
 
 def download_to_imgbb(pathfile):
-    apiKey = 'aa17abc1534c005e5fc44597ecdd8954'
+    apiKey = os.environ['IMGBB_API_KEY']
     fileLocation = pathfile
     with open(fileLocation, "rb") as file:
         url = "https://api.imgbb.com/1/upload"
