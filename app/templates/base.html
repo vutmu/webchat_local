@@ -5,17 +5,18 @@
 {%block content%}
 <div class="row vh-100 main">
     <div class="container col-md-6 vh-100 firstblock">
-        <div class="overflow-auto h-75 messages"></div>
+        <div class="overflow-auto h-75 messages" id="22"></div>
         <div class="row enterzone">
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
             <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
         </div>
     </div>
-    <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">some usefull block</div>
+    <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">
+        some usefull block
+        <p id="showScroll"></p>
+    </div>
 </div>
 <script>
-    setInterval(get_mess,2000)
-
     function pretty_print(json)
     {
         let author=json['author']
@@ -42,7 +43,8 @@
             if (posts == '-404') {
                 window.location = "/dbfail"
             }
-
+            if (posts.length>0) {
+            console.log(posts.length)
             $.each(posts, function (index, value) {
                 let mess_id = value['id']
                 let ref = "../profile/" + value['author']
@@ -58,13 +60,27 @@
                         </div>
                     </div>`;
                 $('.messages').append(messblock)
-            });
+            });}
         })
     }
 
+    function scroll_down() {
+        let pos=$(".messages").scrollTop()
+        let maxpos=$(".messages").height()
+        if (pos==0 || pos==maxpos) {
+            $(".messages").scrollTop('9999')}
+    }
 
+    $(window).ready(function(){
 
-    $(document).ready(function(){
+        setInterval(get_mess,2000)
+        $(document).ajaxComplete(scroll_down);
+
+        $(".messages").on('scroll', function() {
+            var scrl= $(".messages").scrollTop()
+            $("#showScroll").html(scrl)
+        });
+
         $("#downbut").on('click',function(){
             $(".firstblock").toggle(300);
             $(".someblock").toggle(300);});
@@ -83,7 +99,6 @@
                 return false;
             }
         })
-
     })
 </script>
 {%endblock%}
