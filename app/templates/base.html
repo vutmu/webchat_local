@@ -5,18 +5,23 @@
 {%block content%}
 <div class="row vh-100 main">
     <div class="container col-md-6 vh-100 firstblock">
-        <div class="overflow-auto h-75 messages" id="22"></div>
+        <div class="overflow-auto h-75 messages" id="22a"></div>
         <div class="row enterzone">
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
             <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
         </div>
     </div>
     <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">
-        some usefull block
-        <p id="showScroll"></p>
+        current_scroll_position    <span id="current_scroll_position"></span><br>
+        height_content    <span id="height_content"></span><br>
+        height_block    <span id="height_block"></span><br>
+        last_auto_scroll_position    <span id="last_auto_scroll_position"></span><br>
     </div>
 </div>
 <script>
+    var height_content=0
+    var current_scroll_position=0
+    var last_auto_scroll_position=0
     function pretty_print(json)
     {
         let author=json['author']
@@ -43,14 +48,14 @@
             if (posts == '-404') {
                 window.location = "/dbfail"
             }
+            let old_height_content=$(".messages")[0].scrollHeight
             if (posts.length>0) {
-            console.log(posts.length)
-            $.each(posts, function (index, value) {
-                let mess_id = value['id']
-                let ref = "../profile/" + value['author']
-                let avatar = value['avatar']
-                let text = pretty_print(value)
-                let messblock = `
+                $.each(posts, function (index, value) {
+                    let mess_id = value['id']
+                    let ref = "../profile/" + value['author']
+                    let avatar = value['avatar']
+                    let text = pretty_print(value)
+                    let messblock = `
                     <div class="container-sm w-100 messblock" id=${mess_id}>
                         <div class="row">
                             <div class="col-2">
@@ -59,26 +64,39 @@
                             <div class="col-9 intext">${text}</div>
                         </div>
                     </div>`;
-                $('.messages').append(messblock)
-            });}
+                    $('.messages').append(messblock)
+                });
+                smart_scroll(old_height_content)
+            }
         })
     }
 
-    function scroll_down() {
-        let pos=$(".messages").scrollTop()
-        let maxpos=$(".messages").height()
-        if (pos==0 || pos==maxpos) {
-            $(".messages").scrollTop('9999')}
+    function smart_scroll(old_height_content) {
+        console.log("old_height_content",old_height_content)
+        let obj=$(".messages")
+        height_content=obj[0].scrollHeight
+        $("#height_content").html(height_content)
+        let height_block=Math.round(obj.height())   // это фактически высота блока(зависит от экрана и постоянна)
+        $("#height_block").html(height_block)
+        if (last_auto_scroll_position==0 || last_auto_scroll_position== current_scroll_position || current_scroll_position+height_block==old_height_content) {
+            obj.scrollTop(height_content)
+            console.log("height_content",height_content )
+            last_auto_scroll_position=obj.scrollTop()
+            console.log("last_auto_scroll_position",last_auto_scroll_position)
+            console.log("current_scroll_position",current_scroll_position)
+            $("#last_auto_scroll_position").html(last_auto_scroll_position)
+        }
     }
+
+
 
     $(window).ready(function(){
 
         setInterval(get_mess,2000)
-        $(document).ajaxComplete(scroll_down);
 
         $(".messages").on('scroll', function() {
-            var scrl= $(".messages").scrollTop()
-            $("#showScroll").html(scrl)
+            current_scroll_position= $(".messages").scrollTop()
+            $("#current_scroll_position").html(current_scroll_position)
         });
 
         $("#downbut").on('click',function(){
