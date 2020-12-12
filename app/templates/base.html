@@ -10,18 +10,22 @@
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
             <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
         </div>
+        <button class="btn btn-warning rounded-circle" id="but2" style="display: none">New!</button>
     </div>
     <div class="col-md-6 vh-100 someblock" style="border: solid 1px #a51616; background-color: red;">
         current_scroll_position    <span id="current_scroll_position"></span><br>
         height_content    <span id="height_content"></span><br>
         height_block    <span id="height_block"></span><br>
         last_auto_scroll_position    <span id="last_auto_scroll_position"></span><br>
+        old_height_content    <span id="old_height_content"></span><br>
     </div>
 </div>
 <script>
     var height_content=0
     var current_scroll_position=0
     var last_auto_scroll_position=0
+    var old_height_content=0
+    var height_block=0
     function pretty_print(json)
     {
         let author=json['author']
@@ -48,7 +52,6 @@
             if (posts == '-404') {
                 window.location = "/dbfail"
             }
-            let old_height_content=$(".messages")[0].scrollHeight
             if (posts.length>0) {
                 $.each(posts, function (index, value) {
                     let mess_id = value['id']
@@ -66,37 +69,42 @@
                     </div>`;
                     $('.messages').append(messblock)
                 });
-                smart_scroll(old_height_content)
+                smart_scroll()
             }
         })
     }
 
-    function smart_scroll(old_height_content) {
-        console.log("old_height_content",old_height_content)
+    function smart_scroll() {
         let obj=$(".messages")
         height_content=obj[0].scrollHeight
         $("#height_content").html(height_content)
-        let height_block=Math.round(obj.height())   // это фактически высота блока(зависит от экрана и постоянна)
+        height_block=Math.round(obj.height())   // это фактически высота блока(зависит от экрана и постоянна, но мб ее надо обновлять)
         $("#height_block").html(height_block)
         if (last_auto_scroll_position==0 || last_auto_scroll_position== current_scroll_position || current_scroll_position+height_block==old_height_content) {
             obj.scrollTop(height_content)
-            console.log("height_content",height_content )
             last_auto_scroll_position=obj.scrollTop()
-            console.log("last_auto_scroll_position",last_auto_scroll_position)
-            console.log("current_scroll_position",current_scroll_position)
             $("#last_auto_scroll_position").html(last_auto_scroll_position)
         }
+        else {$("#but2").css("display","block")}
+        old_height_content=height_content
+        $("#old_height_content").html(old_height_content)
     }
-
-
 
     $(window).ready(function(){
 
         setInterval(get_mess,2000)
 
+        $("#but2").on('click', function() {
+            $(".messages").scrollTop(height_content)
+            $("#but2").css("display","none")
+        });
+
         $(".messages").on('scroll', function() {
             current_scroll_position= $(".messages").scrollTop()
             $("#current_scroll_position").html(current_scroll_position)
+            if (current_scroll_position+height_block==old_height_content) {
+                $("#but2").css("display","none")
+            }
         });
 
         $("#downbut").on('click',function(){

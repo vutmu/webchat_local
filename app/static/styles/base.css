@@ -46,9 +46,11 @@
     font-size: 1.5rem;
     /*text-align: justify;*/
 }
-/*#but1 {
-    justify: right;
-}*/
+#but2 {
+    position: absolute;
+    bottom: 30%;
+    right: 5%;
+}
 
 #downbut, .someblock {
         display: none;
