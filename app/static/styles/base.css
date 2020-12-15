@@ -1,7 +1,6 @@
 html {
   font-size: 1rem;
 }
-
 .messblock {
     /*width: 100%;
     height: 25%;*/
@@ -11,18 +10,12 @@ html {
     /*float: left;*/
     min-height: 25%;
 }
-
 .messblock > a {
     border: solid 1px #a51616;
 }
-/*body {
-    background-image: -webkit-linear-gradient(white, blue);
-}*/
 .main {
     background-image: -webkit-linear-gradient(white, blue);
-    /*position: fixed;
-    width: 100%;
-    height:100%;*/
+    margin: 0;
 }
 
 .messblock > a {
@@ -76,5 +69,4 @@ html {
     font-size: 0.5rem;
     /*padding: 2px;*/
   }
-
 }

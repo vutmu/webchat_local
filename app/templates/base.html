@@ -3,8 +3,8 @@
 <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/base.css') }}">
 {%endblock%}
 {%block content%}
-<div class="row vh-100 main">
-    <div class="container col-md-6 vh-100 firstblock">
+<div class="row main">
+    <div class="container col-md-6 vh-100 firstblock" style="padding: 0px">
         <div class="overflow-auto h-75 messages" id="22a"></div>
         <div class="row enterzone">
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
@@ -32,7 +32,7 @@
         let body=json['body']
         let re=/\\n/g
         let edit_body=body.replace(re,'<br>')
-        re=/[^ ]{20}/g
+        re=/[^ ]{19}/g
         edit_body=edit_body.replace(re,"$&"+'- ')
         let mstime=Math.round(json['posttime'])*1000
         let posttime=new Date(mstime)
