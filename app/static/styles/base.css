@@ -69,7 +69,7 @@ html {
 
 @media (max-width: 767px) {
   html {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   .btn {
     font-size: 0.5rem;

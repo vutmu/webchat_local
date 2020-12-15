@@ -32,7 +32,7 @@
         let body=json['body']
         let re=/\\n/g
         let edit_body=body.replace(re,'<br>')
-        re=/[^ ]{30}/g
+        re=/[^ ]{25}/g
         edit_body=edit_body.replace(re,"$&"+'- ')
         let mstime=Math.round(json['posttime'])*1000
         let posttime=new Date(mstime)
@@ -61,7 +61,7 @@
                     let messblock = `
                     <div class="container-sm w-100 messblock" id=${mess_id}>
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col-2" style="padding-right: 0px">
                                 <a  href=${ref}><img src=${avatar} class="img-fluid" alt="avatarka"></a>
                             </div>
                             <div class="col-9 intext">${text}</div>
