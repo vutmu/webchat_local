@@ -32,7 +32,7 @@
         let body=json['body']
         let re=/\\n/g
         let edit_body=body.replace(re,'<br>')
-        re=/[^ ]{25}/g
+        re=/[^ ]{20}/g
         edit_body=edit_body.replace(re,"$&"+'- ')
         let mstime=Math.round(json['posttime'])*1000
         let posttime=new Date(mstime)

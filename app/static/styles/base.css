@@ -33,6 +33,7 @@ html {
 .messages {
     /*height: 70%;*/
     border: solid 3px green;
+    overflow-x: hidden;
 }
 
 .enterzone {
