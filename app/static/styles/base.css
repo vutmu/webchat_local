@@ -1,13 +1,13 @@
+
+/*html, body, .main, .firstblock {
+    height: 100vh;
+}*/
+
 html {
   font-size: 1rem;
 }
 .messblock {
-    /*width: 100%;
-    height: 25%;*/
-    /*background: #7a7070;
-    padding: 5px 20px 5px 5px;*/
     border: solid 1px #a51616;
-    /*float: left;*/
     min-height: 25%;
 }
 .messblock > a {
@@ -24,7 +24,7 @@ html {
 }
 
 .messages {
-    /*height: 70%;*/
+    height: 75vh !important;
     border: solid 3px green;
     overflow-x: hidden;
 }
