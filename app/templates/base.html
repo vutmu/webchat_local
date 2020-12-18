@@ -87,6 +87,7 @@
         $("#navbar_height").html(navbar_height)
         let useful_height=real_browser_height-navbar_height
         $("#useful_height").html(useful_height)
+        $("html").css('height',real_browser_height)
         $(".messages").css('height',useful_height*0.85)
         $(".enterzone").css('height',useful_height*0.15)
     }
