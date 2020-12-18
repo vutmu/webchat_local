@@ -5,19 +5,25 @@
 {%block content%}
 <div class="row main">
     <div class="container col-md-6 firstblock" style="padding: 0px">
-        <div class="overflow-auto h-75 messages" id="22a"></div>
+        <div class="overflow-auto messages" id="22a"></div>
         <div class="row enterzone">
             <textarea class="col-8" id="your_message" placeholder="введите текст" maxlength="1000"></textarea>
             <button class="col-3 btn btn-success " id="but1" type="button">Отправить</button>
         </div>
         <button class="btn btn-warning rounded-circle" id="but2" style="display: none">New!</button>
+        <span id="screen_real_height"></span><br>
     </div>
     <div class="col-md-6 someblock" style="border: solid 1px #a51616; background-color: red;">
+        <p>то что касается скролинга</p>
         current_scroll_position    <span id="current_scroll_position"></span><br>
         height_content    <span id="height_content"></span><br>
         height_block    <span id="height_block"></span><br>
         last_auto_scroll_position    <span id="last_auto_scroll_position"></span><br>
         old_height_content    <span id="old_height_content"></span><br>
+        <p>то что касается калибровки высоты</p>
+        real_browser_height    <span id="real_browser_height"></span><br>
+        navbar_height    <span id="navbar_height"></span><br>
+        useful_height    <span id="useful_height"></span><br>
     </div>
 </div>
 <script>
@@ -74,6 +80,17 @@
         })
     }
 
+    function calibrate() {
+        let real_browser_height=window.innerHeight
+        $("#real_browser_height").html(real_browser_height)
+        let navbar_height=$(".navbar").innerHeight()
+        $("#navbar_height").html(navbar_height)
+        let useful_height=real_browser_height-navbar_height
+        $("#useful_height").html(useful_height)
+        $(".messages").css('height',useful_height*0.85)
+        $(".enterzone").css('height',useful_height*0.15)
+    }
+
     function smart_scroll() {
         let obj=$(".messages")
         height_content=obj[0].scrollHeight
@@ -93,6 +110,16 @@
     $(window).ready(function(){
 
         setInterval(get_mess,2000)
+
+        //сюда вставить функцию калибровки высоты элементов
+        calibrate()
+
+        //$(window).on('resize', function () {
+        //    $("#screen_real_height").html(window.innerHeight)
+        //    $("#navbar_height").html($(".navbar").innerHeight())
+        //})
+
+
 
         $("#but2").on('click', function() {
             $(".messages").scrollTop(height_content)

@@ -24,7 +24,7 @@ html {
 }
 
 .messages {
-    height: 75vh !important;
+    /*height: 75vh !important;*/
     border: solid 3px green;
     overflow-x: hidden;
 }
@@ -44,6 +44,11 @@ html {
 #but2 {
     position: absolute;
     bottom: 30%;
+    right: 5%;
+}
+#screen_real_height {
+    position: absolute;
+    bottom: 35%;
     right: 5%;
 }
 
