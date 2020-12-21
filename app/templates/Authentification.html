@@ -3,27 +3,26 @@
     <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/auth.css') }}">
 {%endblock%}
 {%block content%}
-<div class="container vh-100 auth">
-    <input id="in_name" class=" m-1" type="text" maxlength="50" placeholder="Ваше имя">
-    <input id="in_password" class=" m-1" type="text" maxlength="50" placeholder="Ваш пароль" >
-    <div class="row justify-content-between">
-        <button id="but4" class="btn btn-success ">Войти</button>
-        <button class="btn btn-warning right-but">Регистрация</button>
-    </div>
+<div class="auth">
+    <input id="in_name" type="text" maxlength="50" placeholder="Ваше имя">
+    <input id="in_password" type="text" maxlength="50" placeholder="Ваш пароль">
+    <button id="but4" class="btn btn-success ">Войти</button>
+    <button class="btn btn-warning right-but">Регистрация</button>
 </div>
-<div class= "container-fluid vh-100 reg">
-    <input id="your_name" class="w-100 m-1" type="text" maxlength="50" placeholder="Придумайте Ваше имя)">
-    <input id="your_password" class="w-100 m-1" type="text" maxlength="50" placeholder="Придумайте Ваш пароль)">
-    <input id="your_email" class="w-100 m-1" type="text" maxlength="50" placeholder="Куда Вам отправить письмо?">
-    <button id="but2" class="btn btn-success left-but">Поехали!</button>
+<div class= "reg">
+    <input id="your_name" type="text" maxlength="50" placeholder="Придумайте Ваше имя)">
+    <input id="your_password" type="text" maxlength="50" placeholder="Придумайте Ваш пароль)">
+    <input id="your_email" type="text" maxlength="50" placeholder="Куда Вам отправить письмо?">
+    <button id="but2" class="btn btn-success">Поехали!</button>
     <input id="check_code" type="text" maxlength="50" placeholder="проверочный код">
-    <button id="but3" class="btn btn-secondary center-but">Валидация</button>
+    <button id="but3" class="btn btn-secondary">Валидация</button>
     <button class="btn btn-warning right-but">Отмена</button>
 </div>
 <script>
 
     $(document).ready(function(){
 
+        $(".reg").css('display','none')
 
         $(".right-but").on('click',function(){
             $(".auth").toggle(300);

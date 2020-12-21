@@ -1,10 +1,33 @@
 
-/*html, body, .main, .firstblock {
+html, body {
     height: 100vh;
-}*/
+}
 
 html {
   font-size: 1rem;
+}
+.main {
+
+    height: 85vh; /*это надо исправить!*/
+    display: flex;
+    justify-content: flex-end;
+    background-image: -webkit-linear-gradient(white, blue);
+    /*margin: 0;*/
+}
+.firstblock, .someblock {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: solid 2px #00FA9A;
+}
+.messages {
+    /*flex: 6;*/
+    display: flex;
+    flex-direction: column;
+    /*height: 70vh !important;*/
+    border: solid 3px green;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .messblock {
     border: solid 1px #a51616;
@@ -13,31 +36,26 @@ html {
 .messblock > a {
     border: solid 1px #a51616;
 }
-.main {
-    background-image: -webkit-linear-gradient(white, blue);
-    margin: 0;
-}
+
 
 .messblock > a {
     padding-right: 5px;
     max-width: 100%;
 }
-
-.messages {
-    /*height: 75vh !important;*/
-    border: solid 3px green;
-    overflow-x: hidden;
-}
-
 .enterzone {
-    /*font-size: 1rem;*/
+    /*flex: 1;*/
+    display: flex;
+    /*Justify-content: space-between;
+    height: 5vh !important;
     border: solid 2px yellow;
-    Justify-content: space-between;
-    margin: 0rem;
-    padding: 0.5rem;
-}
 
-  .btn {
+    margin: 0rem;
+    padding: 0.5rem;*/
+}
+#your_message {
+    flex: 1;
+}
+.btn {
     font-size: 0.8rem;
     /*padding: 2px;*/
   }
