@@ -21,7 +21,7 @@
         last_auto_scroll_position    <span id="last_auto_scroll_position"></span><br>
         old_height_content    <span id="old_height_content"></span><br>
         <p>то что касается калибровки высоты</p>
-        real_browser_height    <span id="real_browser_height"></span><br>
+        main    <span id="main"></span><br>
         navbar_height    <span id="navbar_height"></span><br>
         useful_height    <span id="useful_height"></span><br>
     </div>
@@ -80,19 +80,13 @@
         })
     }
 
-<!--    function calibrate() {-->
-<!--        let real_browser_height=window.innerHeight-->
-<!--        $("#real_browser_height").html(real_browser_height)-->
-<!--        let navbar_height=$(".navbar").innerHeight()-->
-<!--        $("#navbar_height").html(navbar_height)-->
-<!--        let useful_height=real_browser_height-navbar_height-->
-<!--        $("#useful_height").html(useful_height)-->
-<!--        console.log(useful_height)-->
-<!--        //$("html").css('height','100vh')-->
-<!--        console.log(useful_height*0.85)-->
-<!--        $(".messages").css('height',useful_height*0.80)-->
-<!--        //$(".enterzone").css('height',useful_height*0.12)-->
-<!--    }-->
+    function calibrate() {
+        let main=$(".main").height()
+        $("#main").html(main)
+        let navbar_height=$(".navbar").height()
+        $("#navbar_height").html(navbar_height)
+        $(".main").css("height",main-navbar_height)
+    }
 
     function smart_scroll() {
         let obj=$(".messages")
@@ -115,7 +109,7 @@
         setInterval(get_mess,2000)
 
         //сюда вставить функцию калибровки высоты элементов
-        //calibrate()
+        calibrate()
 
         $(window).on('resize', function () {
             $("#screen_real_height").html(window.innerHeight)
