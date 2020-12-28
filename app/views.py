@@ -106,7 +106,7 @@ def base():
             return render_template('base.html', data=data)
         elif request.args.get('subfunction') == 'get_mess':
             last_id = request.args.get('last_id')
-            query = f"SELECT messages.id, messages.name, message, posting_time, avatar " \
+            query = f"SELECT messages.id, messages.name, message, posting_time, avatar, user_id " \
                     f"FROM messages join accounts on " \
                     f"messages.name=accounts.name WHERE messages.id>{last_id} order by messages.id LIMIT 100 "
             dbresponse = pgdb(query)
@@ -114,8 +114,8 @@ def base():
                 posts = {'posts': '-404'}
                 return json.dumps(posts)
             else:
-                posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4]} for i in
-                         dbresponse]
+                posts = [{'id': i[0], 'author': i[1], 'body': i[2], 'posttime': i[3], 'avatar': i[4], 'user_id': i[5]}
+                         for i in dbresponse]
                 posts = {'posts': posts}
                 return json.dumps(posts)
         elif request.args.get('subfunction') == 'logout':
@@ -131,16 +131,17 @@ def base():
             return {'status': str(dbresponse[-1][-1])}
 
 
-@app.route('/profile/<user>')
+@app.route('/profile/<user_id>')
 @sessions
-def profile(user):
-    query = f"SELECT * FROM accounts where name='{user}'"
+def profile(user_id):
+    query = f"SELECT * FROM accounts where user_id='{user_id}'"
     dbresponse = pgdb(query)
     if len(dbresponse) > 0:
+        user_id = dbresponse[-1][8]
         user = dbresponse[-1][0]
         name = session['username']
         full_avatar = dbresponse[-1][6]
-        data = {'name': name, 'user': user, 'full_avatar': full_avatar, 'title': f'Профиль {user}'}
+        data = {'user_id': user_id, 'name': name, 'user': user, 'full_avatar': full_avatar, 'title': f'Профиль {user}'}
         return render_template("profile.html", data=data)
     else:
         return "такого челика нету!"

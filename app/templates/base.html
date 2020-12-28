@@ -61,7 +61,7 @@
             if (posts.length>0) {
                 $.each(posts, function (index, value) {
                     let mess_id = value['id']
-                    let ref = "../profile/" + value['author']
+                    let ref = "../profile/" + value['user_id']
                     let avatar = value['avatar']
                     let text = pretty_print(value)
                     let messblock = `
@@ -83,7 +83,7 @@
     function calibrate() {
         let main=$(".main").height()
         $("#main").html(main)
-        let navbar_height=$(".navbar").height()
+        let navbar_height=$(".navbar").outerHeight()
         $("#navbar_height").html(navbar_height)
         $(".main").css("height",main-navbar_height)
     }
