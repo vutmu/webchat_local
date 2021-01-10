@@ -1,6 +1,6 @@
-
+* {box-sizing: border-box; }
 html, body, .main {
-    height: 100vh;
+    background-image: -webkit-linear-gradient(white, blue);
 }
 
 html {
@@ -8,47 +8,58 @@ html {
 }
 .main {
     display: flex;
-    justify-content: flex-end;
-    background-image: -webkit-linear-gradient(white, blue);
-    /*margin: 0;*/
+    justify-content: space-between;
+    height: 100vh;
+    align-content: space-around;
 }
-.firstblock, .someblock {
+.main > div {
+    height: 80%;
+    margin: 50px;
+    padding: 0px;
+}
+.firstblock {
     display: flex;
+    height: 100%;
     flex-direction: column;
-    justify-content: flex-end;
-    border: solid 2px #00FA9A;
+    justify-content: space-between;
 }
+/*.firstblock > div {
+    margin: 0px;
+    padding: 0px;
+}*/
 .messages {
-    /*flex: 6;*/
     display: flex;
     flex-direction: column;
-    /*height: 70vh !important;*/
+    flex-grow: 8;
+    margin: 10px;
     border: solid 3px green;
     overflow-x: hidden;
     overflow-y: auto;
 }
+.enterzone {
+    display: flex;
+    margin: 10px;
+}
 .messblock {
+    display: flex;
+    flex-direction: row;
     border: solid 1px #a51616;
     min-height: 25%;
 }
+.avka {
+    width: 20%;
+    border: solid 3px black;
+    margin: 10px 10px;
+}
+.intext {
+    width: 80%;
+    border: solid 3px black;
+    margin: 10px 10px;
+}
 .messblock > a {
     border: solid 1px #a51616;
-}
-
-
-.messblock > a {
     padding-right: 5px;
     max-width: 100%;
-}
-.enterzone {
-    /*flex: 1;*/
-    display: flex;
-    /*Justify-content: space-between;
-    height: 5vh !important;
-    border: solid 2px yellow;
-
-    margin: 0rem;
-    padding: 0.5rem;*/
 }
 #your_message {
     flex: 1;
@@ -62,20 +73,9 @@ html {
     bottom: 30%;
     right: 5%;
 }
-#screen_real_height {
-    position: absolute;
-    bottom: 35%;
-    right: 5%;
-}
-
 #downbut, .someblock {
         display: none;
     }
-@media (max-width: 767px) {
-    #downbut {
-        display: block;
-    }
-}
 @media (min-width: 768px) {
     .someblock {
         display: block;
@@ -83,11 +83,21 @@ html {
 }
 
 @media (max-width: 767px) {
-  html {
-    font-size: 1.2rem;
-  }
-  .btn {
-    font-size: 0.5rem;
-    /*padding: 2px;*/
-  }
+    #downbut {
+        display: block;
+    }
+    /*html {
+        font-size: 1.2rem;
+    }
+    .btn {
+        font-size: 0.5rem;
+        padding: 2px;*/
+    .main > div {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
 }
+
+
+
