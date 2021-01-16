@@ -1,0 +1,8 @@
+* {box-sizing: border-box; }
+html, body {
+    background-image: -webkit-linear-gradient(white, blue);
+    height: 100vh;
+}
+#but1 {
+    display: none;
+}

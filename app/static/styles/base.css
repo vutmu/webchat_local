@@ -23,16 +23,12 @@ html {
     flex-direction: column;
     justify-content: space-between;
 }
-/*.firstblock > div {
-    margin: 0px;
-    padding: 0px;
-}*/
 .messages {
     display: flex;
     flex-direction: column;
     flex-grow: 8;
     margin: 10px;
-    border: solid 3px green;
+    /*border: solid 3px green;*/
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -42,31 +38,29 @@ html {
 }
 .messblock {
     display: flex;
-    flex-direction: row;
+    align-items: flex-start;
     border: solid 1px #a51616;
-    min-height: 25%;
+    border-radius: 10px;
+    margin: 5px 5px;
 }
-.avka {
-    width: 20%;
-    border: solid 3px black;
+.messblock > a {
+    min-width: 10%;
     margin: 10px 10px;
 }
 .intext {
-    width: 80%;
-    border: solid 3px black;
+    display: inline-block;
+    /*border: solid 3px black;*/
     margin: 10px 10px;
+    height: min-content;
 }
-.messblock > a {
-    border: solid 1px #a51616;
-    padding-right: 5px;
-    max-width: 100%;
+.avka {
+    height: 50px;
 }
 #your_message {
     flex: 1;
 }
 .btn {
     font-size: 0.8rem;
-    /*padding: 2px;*/
   }
 #but2 {
     position: absolute;
@@ -86,16 +80,14 @@ html {
     #downbut {
         display: block;
     }
-    /*html {
-        font-size: 1.2rem;
+    .main {
+        height: 100vh;
     }
-    .btn {
-        font-size: 0.5rem;
-        padding: 2px;*/
+
     .main > div {
         height: 100%;
-        margin: 0px;
-        padding: 0px;
+        margin: 0px !important;
+        padding: 0px !important;
     }
 }
 

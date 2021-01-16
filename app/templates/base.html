@@ -65,9 +65,7 @@
                     let text = pretty_print(value)
                     let messblock = `
                     <div class="messblock" id=${mess_id}>
-                        <div class="avka">
-                            <a  href=${ref}><img src=${avatar} class="img-fluid" alt="avatarka"></a>
-                        </div>
+                        <a href=${ref}><img src=${avatar} class="avka" alt="avatarka"></a>
                         <div class="intext">${text}</div>
                     </div>`;
                     $('.messages').append(messblock)
