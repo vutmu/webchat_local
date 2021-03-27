@@ -13,8 +13,8 @@ def pgdb(query):
         try:
             return cursor.fetchall()
         except Exception as err:
-            print(err)
+            #print(err)
             return [(-200,)]  # типа код no results to fetch
     except Exception as err:
-        print(err)
+        #print(err)
         return [(-404,)]  # типа код недоступной базы

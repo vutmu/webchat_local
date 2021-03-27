@@ -154,11 +154,11 @@ def settings():
     if request.method == 'GET':
         if 'subfunction' not in request.args:
             name = session['username']
-            query = f"SELECT * FROM accounts where name='{name}'"
+            query = f"SELECT avatar, full_avatar FROM accounts where name='{name}'"
             dbresponse = pgdb(query)
-            name = dbresponse[-1][0]
-            avatar = dbresponse[-1][5]
-            data = {'name': name, 'avatar': avatar, 'title': f'Настройки {name}'}
+            avatar = dbresponse[-1][0]
+            full_avatar = dbresponse[-1][1]
+            data = {'name': name, 'avatar': avatar, 'full_avatar': full_avatar, 'title': f'Настройки {name}'}
             return render_template("settings.html", data=data)
         elif request.args.get('subfunction') == 'get_pictures':  # TODO переделать в коллекцию, пофиксить
             path = 'app/static/images'
@@ -194,6 +194,14 @@ def allusers():
             print(users)
             data = {'users': users, 'name': name, 'title': 'список юзеров'}
             return render_template("allusers.html", data=data)
+
+
+@app.route('/games', methods=['GET', 'POST'])
+@sessions
+def games():
+    if request.method == 'GET':
+        data = {'title': 'Игры'}
+        return render_template('games.html', data=data)
 
 
 @app.before_request

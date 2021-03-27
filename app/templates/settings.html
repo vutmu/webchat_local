@@ -3,14 +3,15 @@
 <link  rel = "stylesheet" href =  "{{ url_for('static',filename='styles/settings.css') }}">
 {%endblock%}
 {%block content%}
-<p>это страница настроек {{data['name']}}</p><br>
-<img src={{data['avatar']}} alt="avatar" id="avatar"><br>
-<input type="button" id="but1" value="коллекция аватарок">
-<form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-<div class= "par1" ></div>
+<div class= "par1" >
+      <p>это страница настроек {{data['name']}}</p>
+      <img src={{data['avatar']}} alt="avatar" id="avatar">
+      <input type="button" id="but1" value="коллекция аватарок">
+      <form method=post enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+      </form>
+</div>
 <script>
     $('#but1').on('click',function (){
         $.get('/settings', {subfunction: 'get_pictures'},function (response){

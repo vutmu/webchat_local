@@ -6,3 +6,18 @@ html, body {
 #but1 {
     display: none;
 }
+.par1 {
+    display: flex;
+    flex-wrap: wrap;
+    border: solid 3px black;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-end;
+}
+.par1 > * {
+    border: solid 1px red;
+    margin: 0px 10px 5px;
+}
+.par1 > p {
+    margin: 10px 10px 5px;
+}
