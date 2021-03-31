@@ -225,15 +225,17 @@ def games():
 def tokens():
     data = request.form
     if ('token' in data) and ('secret_key' in data):
-        token, secret_key = data['token'], data['secret_key']
-        if (secret_key == 'very_secret_key') and token in active_keys:
-            name = active_keys[token]
-            data = {'name': name}
-            return data
+        token, key = data['token'], data['secret_key']
+        if key != 'very_secret_key':
+            response = {'status': 'fail', 'name': 'wrong secret key between apps!'}
+        elif token not in active_keys:
+            response = {'status': 'fail', 'name': 'token not in active_keys(no such active user)'}
         else:
-            return {'name': 'permission denied'}
+            name = active_keys[token]
+            response = {'status': 'success', 'name': name}
     else:
-        return {'name': 'wrong request!'}
+        response = {'status': 'fail', 'name': 'wrong request! missed token or secret_key!'}
+    return response
 
 
 @app.before_request
