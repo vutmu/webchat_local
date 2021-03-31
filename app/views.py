@@ -217,7 +217,7 @@ def games():
             print(active_members.items())
             return render_template('games.html', data=data)
         elif request.args.get('subfunction') == 'get_token':
-            data = {'token': active_members[session['username']]}
+            data = {'token': active_members[session['username']], 'address': os.environ['XOXO_ADDRESS']}
             return json.dumps(data)
 
 

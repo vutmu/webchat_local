@@ -12,8 +12,7 @@ $('#xoxo').on('click', ()=>{
 //        alert( 'Ошибка ' + this.status );
 //        }
 //        xhr.send();
-//        let ref='http://localhost:8080/?token='+response.token
-        let ref='https://wasmoh-xoxo.herokuapp.com/?token='+response.token
+        let ref=response.address+response.token
         window.open(ref, "_self")
 
     })
