@@ -23,6 +23,7 @@
         main    <span id="main"></span><br>
         navbar_height    <span id="navbar_height"></span><br>
         useful_height    <span id="useful_height"></span><br>
+        session   <span id="session"></span><br>
     </div>
 </div>
 <script>
@@ -103,6 +104,8 @@
 
         setInterval(get_mess,2000)
 
+        var someSession = $.session.get("session")
+        alert(someSession)
         //сюда вставить функцию калибровки высоты элементов
         calibrate()
 

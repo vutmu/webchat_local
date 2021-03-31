@@ -1,4 +1,4 @@
-from flask import session, url_for
+from flask import session, url_for, request
 from werkzeug.utils import redirect
 
 

@@ -12,6 +12,7 @@ from werkzeug.utils import redirect
 from app.dbrout import pgdb
 from app.imgbb import imgrout
 from app.sessions import sessions
+from app.key_generator import key_generator
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -31,6 +32,9 @@ app.config.update(
 )
 mail = Mail(app)
 
+active_members = {}
+active_keys = {}
+
 
 @app.route('/')
 @app.route("/auth", methods=['POST', 'GET'])
@@ -46,6 +50,13 @@ def auth():
             dbresponse = pgdb(query)
             if dbresponse[-1][-1] == 1:
                 session['username'] = name
+                temp_key = key_generator()
+                while temp_key in active_members.keys():
+                    temp_key = key_generator()
+                active_members[name] = temp_key
+                active_keys[temp_key] = name
+                print(f'пользователь {name} авторизован. Ключ {active_members[name]}')
+
             return json.dumps({'status': str(dbresponse[-1][-1])})
         elif data['subfunction'] == 'sendmail':
             name = data['in_name']
@@ -85,6 +96,7 @@ def auth():
                 query = f"UPDATE accounts SET status=true WHERE name='{name}' AND checkcode={checkcode}"
                 pgdb(query)
                 session['username'] = name
+
                 return json.dumps({'status': 'валидация успешна!'})
 
 
@@ -200,8 +212,28 @@ def allusers():
 @sessions
 def games():
     if request.method == 'GET':
-        data = {'title': 'Игры'}
-        return render_template('games.html', data=data)
+        if 'subfunction' not in request.args:
+            data = {'title': 'Игры'}
+            print(active_members.items())
+            return render_template('games.html', data=data)
+        elif request.args.get('subfunction') == 'get_token':
+            data = {'token': active_members[session['username']]}
+            return json.dumps(data)
+
+
+@app.route('/tokens', methods=['POST'])  # TODO небезопасно! Переделать!
+def tokens():
+    data = request.form
+    if ('token' in data) and ('secret_key' in data):
+        token, secret_key = data['token'], data['secret_key']
+        if (secret_key == 'very_secret_key') and token in active_keys:
+            name = active_keys[token]
+            data = {'name': name}
+            return data
+        else:
+            return {'name': 'permission denied'}
+    else:
+        return {'name': 'wrong request!'}
 
 
 @app.before_request
