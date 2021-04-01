@@ -5,6 +5,7 @@ from flask_mail import Mail, Message
 import random
 import os
 import time
+import redis
 from dotenv import load_dotenv
 
 from werkzeug.utils import redirect
@@ -32,8 +33,10 @@ app.config.update(
 )
 mail = Mail(app)
 
-active_members = {}
-active_keys = {}
+redis_host=os.environ['REDIS_HOST']
+redis_port=os.environ['REDIS_PORT']
+active_members = redis.Redis(host=redis_host, port=redis_port, db=0)
+active_keys = redis.Redis(host=redis_host, port=redis_port, db=1)
 
 
 @app.route('/')
@@ -51,11 +54,11 @@ def auth():
             if dbresponse[-1][-1] == 1:
                 session['username'] = name
                 temp_key = key_generator()
-                while temp_key in active_members.keys():
+                while active_keys.exists(temp_key) == 1:
                     temp_key = key_generator()
-                active_members[name] = temp_key
-                active_keys[temp_key] = name
-                print(f'пользователь {name} авторизован. Ключ {active_members[name]}')
+                active_members.set(name, temp_key)
+                active_keys.set(temp_key, name)
+                print(f'пользователь {name} авторизован. Ключ {temp_key}')
 
             return json.dumps({'status': str(dbresponse[-1][-1])})
         elif data['subfunction'] == 'sendmail':
@@ -214,10 +217,9 @@ def games():
     if request.method == 'GET':
         if 'subfunction' not in request.args:
             data = {'title': 'Игры'}
-            print(active_members.items())
             return render_template('games.html', data=data)
         elif request.args.get('subfunction') == 'get_token':
-            data = {'token': active_members[session['username']], 'address': os.environ['XOXO_ADDRESS']}
+            data = {'token': active_members.get(session['username']).decode('ascii'), 'address': os.environ['XOXO_ADDRESS']}
             return json.dumps(data)
 
 
@@ -228,10 +230,10 @@ def tokens():
         token, key = data['token'], data['secret_key']
         if key != 'very_secret_key':
             response = {'status': 'fail', 'name': 'wrong secret key between apps!'}
-        elif token not in active_keys:
+        elif active_keys.exists(token) == 0:
             response = {'status': 'fail', 'name': 'token not in active_keys(no such active user)'}
         else:
-            name = active_keys[token]
+            name = active_keys.get(token).decode('ascii')
             response = {'status': 'success', 'name': name}
     else:
         response = {'status': 'fail', 'name': 'wrong request! missed token or secret_key!'}
