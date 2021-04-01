@@ -33,10 +33,12 @@ app.config.update(
 )
 mail = Mail(app)
 
-redis_host=os.environ['REDIS_HOST']
-redis_port=os.environ['REDIS_PORT']
-active_members = redis.Redis(host=redis_host, port=redis_port, db=0)
-active_keys = redis.Redis(host=redis_host, port=redis_port, db=1)
+# redis_host = os.environ['REDIS_HOST']
+# redis_port = os.environ['REDIS_PORT']
+# active_members = redis.Redis(host=redis_host, port=redis_port, db=0)
+# active_keys = redis.Redis(host=redis_host, port=redis_port, db=1)
+active_members = redis.from_url(os.environ.get("REDIS_URL"), db=0)
+active_keys = redis.from_url(os.environ.get("REDIS_URL"), db=1)
 
 
 @app.route('/')
@@ -219,7 +221,8 @@ def games():
             data = {'title': 'Игры'}
             return render_template('games.html', data=data)
         elif request.args.get('subfunction') == 'get_token':
-            data = {'token': active_members.get(session['username']).decode('ascii'), 'address': os.environ['XOXO_ADDRESS']}
+            data = {'token': active_members.get(session['username']).decode('ascii'),
+                    'address': os.environ['XOXO_ADDRESS']}
             return json.dumps(data)
 
 

@@ -1,3 +1,4 @@
+
 BareNecessities==0.2.8
 blinker==1.4
 certifi==2020.6.20
@@ -13,7 +14,7 @@ MarkupSafe==1.1.1
 psycopg2==2.8.6
 psycopg2-binary==2.8.6
 python-dotenv==0.15.0
-redis==3.6.0
+redis==3.5.3
 requests==2.24.0
 urllib3==1.25.11
 Werkzeug==1.0.1
