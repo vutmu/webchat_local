@@ -33,12 +33,7 @@ app.config.update(
 )
 mail = Mail(app)
 
-# redis_host = os.environ['REDIS_HOST']
-# redis_port = os.environ['REDIS_PORT']
-# active_members = redis.Redis(host=redis_host, port=redis_port, db=0)
-# active_keys = redis.Redis(host=redis_host, port=redis_port, db=1)
-active_members = redis.from_url(os.environ.get("REDIS_URL"), db=0)
-active_keys = redis.from_url(os.environ.get("REDIS_URL"), db=1)
+active_keys = redis.from_url(os.environ.get("REDIS_URL"), db=0)
 
 
 @app.route('/')
@@ -55,12 +50,6 @@ def auth():
             dbresponse = pgdb(query)
             if dbresponse[-1][-1] == 1:
                 session['username'] = name
-                temp_key = key_generator()
-                while active_keys.exists(temp_key) == 1:
-                    temp_key = key_generator()
-                active_members.set(name, temp_key)
-                active_keys.set(temp_key, name)
-                print(f'пользователь {name} авторизован. Ключ {temp_key}')
 
             return json.dumps({'status': str(dbresponse[-1][-1])})
         elif data['subfunction'] == 'sendmail':
@@ -221,7 +210,15 @@ def games():
             data = {'title': 'Игры'}
             return render_template('games.html', data=data)
         elif request.args.get('subfunction') == 'get_token':
-            data = {'token': active_members.get(session['username']).decode('ascii'),
+            # TODO сюда вставить генерацию временных токенов
+            temp_key = key_generator()
+            name = session['username']
+            while active_keys.exists(temp_key) == 1:
+                temp_key = key_generator()
+            active_keys.set(temp_key, name, ex=60)
+            print(f'пользователь {name} авторизован. Ключ {temp_key}')
+
+            data = {'token': temp_key,
                     'address': os.environ['XOXO_ADDRESS']}
             return json.dumps(data)
 
