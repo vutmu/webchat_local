@@ -234,7 +234,10 @@ def tokens():
             response = {'status': 'fail', 'name': 'token not in active_keys(no such active user)'}
         else:
             name = active_keys.get(token).decode('ascii')
-            response = {'status': 'success', 'name': name}
+            query = f"SELECT avatar FROM accounts where name='{name}'"
+            dbresponse = pgdb(query)
+            avatar = dbresponse[-1][-1]
+            response = {'status': 'success', 'name': name, 'avatar': avatar}
     else:
         response = {'status': 'fail', 'name': 'wrong request! missed token or secret_key!'}
     return response
