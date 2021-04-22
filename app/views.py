@@ -34,7 +34,7 @@ app.config.update(
 mail = Mail(app)
 
 active_keys = redis.from_url(os.environ.get("REDIS_URL"), db=0)
-declarations = redis.from_url(os.environ.get("REDIS_URL"), db=2)
+#declarations = redis.from_url(os.environ.get("REDIS_URL"), db=2)
 
 
 @app.route('/')
@@ -78,7 +78,7 @@ def auth():
 
     elif request.method == 'GET':
         if 'subfunction' not in request.args:
-            info = declarations.get('auth').decode('utf-8')
+            info = active_keys.get('auth').decode('utf-8')
             data = {'title': 'Аутентификация', 'info': info}
             return render_template('Authentification.html', data=data)
         elif request.args['subfunction'] == 'validation':
